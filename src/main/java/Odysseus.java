@@ -15,6 +15,9 @@ public class Odysseus {
         ____________________________________________________________
         """;
 
+    private String[] tasks = new String[100];
+    private Integer count = 0;
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean chatting = true;
