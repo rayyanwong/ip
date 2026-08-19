@@ -1,6 +1,23 @@
+import java.util.Scanner;
+
 public class Odysseus {
     private static final String NAME = "Odysseus";
+
+    private static final String MSG_FORMAT = """
+        ____________________________________________________________
+        %s
+        ____________________________________________________________
+        """;
+
+    private static final String BYE_MSG = """
+        ____________________________________________________________
+        Bye. Hope to see you again soon!
+        ____________________________________________________________
+        """;
+
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean chatting = true;
 
         String str = String.format("""
            ___      _                             \s
@@ -13,9 +30,17 @@ public class Odysseus {
         Hello! I'm %s
         What can I do for you?
         ____________________________________________________________
-        Bye. Hope to see you again soon!
-        ____________________________________________________________
         """, NAME);
         System.out.println(str);
+
+        while (chatting) {
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("bye")) {
+                chatting = false;
+                System.out.println(BYE_MSG);
+            } else {
+                System.out.println(String.format(MSG_FORMAT, input));
+            }
+        }
     }
 }
