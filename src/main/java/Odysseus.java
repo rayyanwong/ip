@@ -15,12 +15,12 @@ public class Odysseus {
         ____________________________________________________________
         """;
 
-    private String[] tasks = new String[100];
-    private Integer count = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean chatting = true;
+        String[] tasks = new String[100];
+        int count = 0;
 
         String str = String.format("""
            ___      _                             \s
@@ -41,8 +41,23 @@ public class Odysseus {
             if (input.equalsIgnoreCase("bye")) {
                 chatting = false;
                 System.out.println(BYE_MSG);
+            } else if (input.equalsIgnoreCase("list")) {
+                // list out tasks
+                StringBuilder sb = new StringBuilder();
+                if (count == 0) {
+                    System.out.println(String.format(MSG_FORMAT, "No tasks available"));
+                } else {
+                    for (int i = 0; i < count; i++) {
+                        sb.append((i + 1) + ". " + tasks[i] + "\n");
+                    }
+                    System.out.println(String.format(MSG_FORMAT, sb.toString()));
+                }
             } else {
-                System.out.println(String.format(MSG_FORMAT, input));
+                // add task
+                tasks[count] = input;
+                count++;
+                String addedMsg = String.format("added: %s", input);
+                System.out.println(String.format(MSG_FORMAT, addedMsg));
             }
         }
     }
