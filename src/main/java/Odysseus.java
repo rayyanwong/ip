@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 /** The main chatbot: reads commands, manages tasks, prints responses */
 public class Odysseus {
@@ -45,8 +46,7 @@ public class Odysseus {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean chatting = true;
-        Task[] tasks = new Task[100];
-        int count = 0;
+        ArrayList<Task> tasks = new ArrayList<Task>();
 
         String str = String.format("""
            ___      _                             \s
@@ -81,27 +81,27 @@ public class Odysseus {
                     case "list" -> {
                         // list out tasks
                         StringBuilder sb = new StringBuilder();
-                        if (count == 0) {
+                        if (tasks.isEmpty()) {
                             System.out.println(String.format(MSG_FORMAT, "No tasks available"));
                         } else {
-                            for (int i = 0; i < count; i++) {
-                                sb.append((i + 1) + ". " + tasks[i].toString() + "\n");
+                            for (int i = 0; i < tasks.size(); i++) {
+                                sb.append((i + 1) + ". " + tasks.get(i).toString() + "\n");
                             }
                             System.out.println(String.format(MSG_FORMAT, sb.toString()));
                         }
                     }
 
                     case "mark" -> {
-                        int idx = parseIndex(inputSplit, count);
-                        tasks[idx].markAsDone();
-                        String msg = String.format(MARK_MSG, tasks[idx]);
+                        int idx = parseIndex(inputSplit, tasks.size());
+                        tasks.get(idx).markAsDone();
+                        String msg = String.format(MARK_MSG, tasks.get(idx));
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
 
                     case "unmark" -> {
-                        int idx = parseIndex(inputSplit, count);
-                        tasks[idx].markAsUndone();
-                        String msg = String.format(UNMARK_MSG, tasks[idx]);
+                        int idx = parseIndex(inputSplit, tasks.size());
+                        tasks.get(idx).markAsUndone();
+                        String msg = String.format(UNMARK_MSG, tasks.get(idx));
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
 
@@ -110,7 +110,6 @@ public class Odysseus {
                             throw new OdysseusException("Hey! The description can't be empty...");
                         }
                         toAdd = new Todo(rest);
-                        tasks[count++] = toAdd;
                     }
 
                     case "deadline" -> {
@@ -125,7 +124,6 @@ public class Odysseus {
                             throw new OdysseusException("Hey! The deadline can't be empty...");
                         }
                         toAdd = new Deadline(parts[0], parts[1]);
-                        tasks[count++] = toAdd;
                     }
 
                     case "event" -> {
@@ -146,7 +144,15 @@ public class Odysseus {
                             throw new OdysseusException("Hey! The end time can't be empty...");
                         }
                         toAdd = new Event(fromParts[0], toParts[0], toParts[1]);
-                        tasks[count++] = toAdd;
+                    }
+
+                    case "delete" -> {
+                        int idx = parseIndex(inputSplit, tasks.size());
+                        Task removedTask = tasks.remove(idx);
+                        String msg = String.format(
+                                "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
+                                removedTask, tasks.size());
+                        System.out.println(String.format(MSG_FORMAT, msg));
                     }
 
                     default -> {
@@ -155,9 +161,10 @@ public class Odysseus {
                     }
                 }
                 if (toAdd != null) {
+                    tasks.add(toAdd);
                     String addedMsg = String.format(
                             "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
-                            toAdd, count);
+                            toAdd, tasks.size());
                     System.out.println(String.format(MSG_FORMAT, addedMsg));
                 }
             } catch (OdysseusException e) {
