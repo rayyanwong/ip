@@ -65,20 +65,23 @@ public class Odysseus {
         while (chatting) {
             try {
                 String input = scanner.nextLine();
+                if (input.isBlank()) {
+                    throw new OdysseusException("Hey! Please enter a command...");
+                }
                 String[] inputSplit = input.split(" ");
                 String command = inputSplit[0];
                 String rest = input.substring(command.length()).trim();
 
                 Task toAdd = null;
 
-                switch (command.toLowerCase()) {
+                switch (Command.fromInput(command)) {
 
-                    case "bye" -> {
+                    case BYE -> {
                         chatting = false;
                         System.out.println(BYE_MSG);
                     }
 
-                    case "list" -> {
+                    case LIST -> {
                         // list out tasks
                         StringBuilder sb = new StringBuilder();
                         if (tasks.isEmpty()) {
@@ -91,28 +94,28 @@ public class Odysseus {
                         }
                     }
 
-                    case "mark" -> {
+                    case MARK -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         tasks.get(idx).markAsDone();
                         String msg = String.format(MARK_MSG, tasks.get(idx));
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
 
-                    case "unmark" -> {
+                    case UNMARK -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         tasks.get(idx).markAsUndone();
                         String msg = String.format(UNMARK_MSG, tasks.get(idx));
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
 
-                    case "todo" -> {
+                    case TODO -> {
                         if (rest.isEmpty()) {
                             throw new OdysseusException("Hey! The description can't be empty...");
                         }
                         toAdd = new Todo(rest);
                     }
 
-                    case "deadline" -> {
+                    case DEADLINE -> {
                         String[] parts = rest.split(" /by ");
                         if (parts.length < 2) {
                             throw new OdysseusException("Hey! A deadline needs a /by time...");
@@ -126,7 +129,7 @@ public class Odysseus {
                         toAdd = new Deadline(parts[0], parts[1]);
                     }
 
-                    case "event" -> {
+                    case EVENT -> {
                         String[] fromParts = rest.split(" /from ");
                         if (fromParts.length < 2) {
                             throw new OdysseusException("Hey! An event needs a /from start time...");
@@ -146,7 +149,7 @@ public class Odysseus {
                         toAdd = new Event(fromParts[0], toParts[0], toParts[1]);
                     }
 
-                    case "delete" -> {
+                    case DELETE -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         Task removedTask = tasks.remove(idx);
                         String msg = String.format(
@@ -155,7 +158,7 @@ public class Odysseus {
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
 
-                    default -> {
+                    case UNKNOWN -> {
                         // Unknown command
                         throw new OdysseusException("Hey! That's not a valid command. Try again.");
                     }
