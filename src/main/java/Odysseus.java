@@ -40,7 +40,12 @@ public class Odysseus {
 
         while (chatting) {
             String input = scanner.nextLine();
-            String command = input.split(" ")[0];
+            String[] inputSplit = input.split(" ");
+            String command = inputSplit[0];
+            String rest = input.substring(command.length()).trim();
+
+            Task toAdd = null;
+
             switch (command.toLowerCase()) {
 
                 case "bye" -> {
@@ -77,13 +82,34 @@ public class Odysseus {
                     System.out.println(String.format(MSG_FORMAT, msg));
                 }
 
+                case "todo" -> {
+                    toAdd = new Todo(rest);
+                    tasks[count++] = toAdd;
+                }
+
+                case "deadline" -> {
+                    String[] parts = rest.split(" /by ");
+                    toAdd = new Deadline(parts[0], parts[1]);
+                    tasks[count++] = toAdd;
+                }
+
+                case "event" -> {
+                    String[] fromParts = rest.split(" /from ");
+                    String[] toParts = fromParts[1].split(" /to ");
+                    toAdd = new Event(fromParts[0], toParts[0], toParts[1]);
+                    tasks[count++] = toAdd;
+                }
+
                 default -> {
                     Task newTask = new Task(input);
-                    tasks[count] = newTask;
-                    count++;
-                    String addedMsg = String.format("added: %s", newTask.toString());
-                    System.out.println(String.format(MSG_FORMAT, addedMsg));
+                    tasks[count++] = newTask;
                 }
+            }
+            if (toAdd != null) {
+                String addedMsg = String.format(
+                        "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
+                        toAdd, count);
+                System.out.println(String.format(MSG_FORMAT, addedMsg));
             }
         }
     }
