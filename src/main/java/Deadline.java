@@ -1,3 +1,4 @@
+/** A task that must be done by a specific date/time */
 public class Deadline extends Task {
     protected String by;
 

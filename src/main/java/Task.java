@@ -1,4 +1,4 @@
-
+/** A task with a description and done status (the base type) */
 public class Task {
     protected String description;
     protected boolean isDone;
