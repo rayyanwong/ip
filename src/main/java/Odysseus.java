@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 /** The main chatbot: reads commands, manages tasks, prints responses */
 public class Odysseus {
@@ -46,8 +47,14 @@ public class Odysseus {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean chatting = true;
-        ArrayList<Task> tasks = new ArrayList<Task>();
-
+        Storage storage = new Storage();
+        List<Task> tasks;
+        try {
+            tasks = storage.load();
+        } catch (OdysseusException e) {
+            System.out.println(e.getMessage());
+            tasks = new ArrayList<>();
+        }
         String str = String.format("""
            ___      _                             \s
           / _ \\  __| |_   _ ___ ___  ___ _   _ ___\s
@@ -97,6 +104,7 @@ public class Odysseus {
                     case MARK -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         tasks.get(idx).markAsDone();
+                        storage.save(tasks);
                         String msg = String.format(MARK_MSG, tasks.get(idx));
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
@@ -104,6 +112,7 @@ public class Odysseus {
                     case UNMARK -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         tasks.get(idx).markAsUndone();
+                        storage.save(tasks);
                         String msg = String.format(UNMARK_MSG, tasks.get(idx));
                         System.out.println(String.format(MSG_FORMAT, msg));
                     }
@@ -152,6 +161,7 @@ public class Odysseus {
                     case DELETE -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         Task removedTask = tasks.remove(idx);
+                        storage.save(tasks);
                         String msg = String.format(
                                 "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
                                 removedTask, tasks.size());
@@ -168,6 +178,7 @@ public class Odysseus {
                     String addedMsg = String.format(
                             "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
                             toAdd, tasks.size());
+                    storage.save(tasks);
                     System.out.println(String.format(MSG_FORMAT, addedMsg));
                 }
             } catch (OdysseusException e) {
