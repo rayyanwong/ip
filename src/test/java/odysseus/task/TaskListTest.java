@@ -15,7 +15,7 @@ public class TaskListTest {
         TaskList l = new TaskList();
         l.add(new Todo("x"));
         assertEquals(1, l.size());
-    };
+    }
 
     @Test
     public void remove_validIndex_returnsRemovedTaskAndShrinksList() {
@@ -24,7 +24,7 @@ public class TaskListTest {
         Task removedTask = l.remove(0);
         assertEquals(0, l.getTasks().size());
         assertEquals("T | 0 | x", removedTask.toSaveFormat());
-    };
+    }
 
     @Test
     public void isEmpty_newList_returnsTrue() {
