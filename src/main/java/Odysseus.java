@@ -8,29 +8,6 @@ public class Odysseus {
     private static final String MARK_MSG = "Nice! I've marked this task as done:%n  %s";
     private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
 
-    /**
-     * Validates and converts a user-entered task number into a 0-based array index.
-     *
-     * @param parts the whitespace-split user input; index 1 holds the number
-     * @param count the current number of tasks (upper bound for the number)
-     * @return the 0-based index into the task array
-     * @throws OdysseusException if the number is missing, non-numeric, or out of range
-     */
-    private static int parseIndex(String[] parts, int count) throws OdysseusException {
-        if (parts.length < 2) {
-            throw new OdysseusException("Provide a task number...");
-        }
-        int n;
-        try {
-            n = Integer.parseInt(parts[1]);
-        } catch (NumberFormatException e) {
-            throw new OdysseusException("Hey! The task number must be a number...");
-        }
-        if (n < 1 || n > count) {
-            throw new OdysseusException("There's no task numbered " + n + "...");
-        }
-        return n - 1;
-    }
 
     public static void main(String[] args) {
         boolean chatting = true;
@@ -72,7 +49,7 @@ public class Odysseus {
                     }
 
                     case MARK -> {
-                        int idx = parseIndex(inputSplit, tasks.size());
+                        int idx = Parser.parseIndex(inputSplit, tasks.size());
                         Task markedTask = tasks.mark(idx);
                         storage.save(tasks.getTasks());
                         String msg = String.format(MARK_MSG, markedTask);
@@ -80,7 +57,7 @@ public class Odysseus {
                     }
 
                     case UNMARK -> {
-                        int idx = parseIndex(inputSplit, tasks.size());
+                        int idx = Parser.parseIndex(inputSplit, tasks.size());
                         Task unmarkedTask = tasks.unmark(idx);
                         storage.save(tasks.getTasks());
                         String msg = String.format(UNMARK_MSG, unmarkedTask);
@@ -88,48 +65,19 @@ public class Odysseus {
                     }
 
                     case TODO -> {
-                        if (rest.isEmpty()) {
-                            throw new OdysseusException("Hey! The description can't be empty...");
-                        }
-                        toAdd = new Todo(rest);
+                        toAdd = Parser.parseTodo(rest);
                     }
 
                     case DEADLINE -> {
-                        String[] parts = rest.split(" /by ");
-                        if (parts.length < 2) {
-                            throw new OdysseusException("Hey! A deadline needs a /by time...");
-                        }
-                        if (parts[0].isEmpty()) {
-                            throw new OdysseusException("Hey! The description can't be empty...");
-                        }
-                        if (parts[1].isEmpty()) {
-                            throw new OdysseusException("Hey! The deadline can't be empty...");
-                        }
-                        toAdd = new Deadline(parts[0], parts[1]);
+                        toAdd = Parser.parseDeadline(rest);
                     }
 
                     case EVENT -> {
-                        String[] fromParts = rest.split(" /from ");
-                        if (fromParts.length < 2) {
-                            throw new OdysseusException("Hey! An event needs a /from start time...");
-                        }
-                        String[] toParts = fromParts[1].split(" /to ");
-                        if (fromParts[0].isEmpty()) {
-                            throw new OdysseusException("Hey! The description can't be empty...");
-                        }
-
-                        if (toParts.length < 2) {
-                            throw new OdysseusException("Hey! An event needs a /to end time...");
-                        }
-
-                        if (toParts[0].isEmpty() || toParts[1].isEmpty()) {
-                            throw new OdysseusException("Hey! The end time can't be empty...");
-                        }
-                        toAdd = new Event(fromParts[0], toParts[0], toParts[1]);
+                        toAdd = Parser.parseEvent(rest);
                     }
 
                     case DELETE -> {
-                        int idx = parseIndex(inputSplit, tasks.size());
+                        int idx = Parser.parseIndex(inputSplit, tasks.size());
                         Task removedTask = tasks.remove(idx);
                         storage.save(tasks.getTasks());
                         String msg = String.format(
