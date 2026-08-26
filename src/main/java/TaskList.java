@@ -7,6 +7,8 @@ public class TaskList {
 
     private final List<Task> tasks;
 
+    public TaskList() { this.tasks = new ArrayList<>(); }
+
     public TaskList(List<Task> initial) {
         this.tasks = initial;
     }

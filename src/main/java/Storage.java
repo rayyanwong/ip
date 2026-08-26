@@ -7,8 +7,8 @@ import java.util.List;
 public class Storage {
     private final Path path;
 
-    public Storage() {
-        this.path = Path.of("data", "odysseus.txt");
+    public Storage(String filePath) {
+        this.path = Path.of(filePath);
     }
 
     public List<Task> load() throws OdysseusException {

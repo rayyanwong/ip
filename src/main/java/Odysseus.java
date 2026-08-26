@@ -4,26 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 /** The main chatbot: reads commands, manages tasks, prints responses */
 public class Odysseus {
+    private final Ui ui;
+    private final Storage storage;
+    private final TaskList tasks;
 
     private static final String MARK_MSG = "Nice! I've marked this task as done:%n  %s";
     private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
 
-
-    public static void main(String[] args) {
-        boolean chatting = true;
-        Ui ui = new Ui();
-        ui.showWelcome();
-        Storage storage = new Storage();
-
-        List<Task> initial;
+    public Odysseus(String filePath) {
+        ui = new Ui();
+        storage = new Storage(filePath);
+        TaskList loaded;
         try {
-            initial = storage.load();
+            loaded = new TaskList(storage.load());
         } catch (OdysseusException e) {
             ui.showError(e);
-            initial = new ArrayList<>();
+            loaded = new TaskList();
         }
-        TaskList tasks = new TaskList(initial);
+        tasks = loaded;
+    }
 
+    public void run() {
+        boolean chatting = true;
+        ui.showWelcome();
         while (chatting) {
             try {
                 String input = ui.readCommand();
@@ -45,7 +48,7 @@ public class Odysseus {
 
                     case LIST -> {
                         // list out tasks
-                       ui.showTasks(tasks.getTasks());
+                        ui.showTasks(tasks.getTasks());
                     }
 
                     case MARK -> {
@@ -92,8 +95,8 @@ public class Odysseus {
                         }
                         String onDateStr = rest;
                         try {
-                           LocalDate onDate = LocalDate.parse(onDateStr);
-                           ui.showTasks(tasks.on(onDate));
+                            LocalDate onDate = LocalDate.parse(onDateStr);
+                            ui.showTasks(tasks.on(onDate));
                         } catch (DateTimeParseException e) {
                             throw new OdysseusException("Hey! The date can't be parsed..." +
                                     "Provide in the form of yyyy-mm-dd");
@@ -117,5 +120,9 @@ public class Odysseus {
                 ui.showError(e);
             }
         }
+    }
+
+    public static void main(String[] args) {
+        new Odysseus("data/odysseus.txt").run();
     }
 }
