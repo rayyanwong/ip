@@ -17,6 +17,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean occursOn(LocalDate date) {
+        return this.by.isEqual(date);
+    }
+
+    @Override
     public String toSaveFormat() {
         return String.format("%s | %d | %s | %s",
                 "D",
