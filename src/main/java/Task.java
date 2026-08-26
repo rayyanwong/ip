@@ -1,5 +1,5 @@
 /** A task with a description and done status (the base type) */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -19,6 +19,8 @@ public class Task {
     public void markAsUndone() {
         isDone = false;
     }
+
+    public abstract String toSaveFormat();
 
     @Override
     public String toString() {
