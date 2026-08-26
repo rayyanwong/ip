@@ -1,11 +1,13 @@
+package odysseus.parser;
+
 public enum Command {
     TODO, DEADLINE, EVENT, LIST, MARK, UNMARK, DELETE, BYE, ON, UNKNOWN;
 
     /**
-     * Maps a raw command word to its Command, case-insensitively.
+     * Maps a raw command word to its odysseus.parser.Command, case-insensitively.
      *
      * @param word the first token of user input
-     * @return the matching Command, or UNKNOWN if none match
+     * @return the matching odysseus.parser.Command, or UNKNOWN if none match
      */
     public static Command fromInput(String word) {
         return switch (word.toLowerCase()) {

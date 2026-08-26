@@ -1,11 +1,15 @@
+package odysseus.task;
+
+import odysseus.OdysseusException;
+
 public class TaskFactory {
 
     private TaskFactory() {}
 
     /**
-     * Rebuilds a Task from one saved line, e.g. "D | 1 | return book | June 6th".
+     * Rebuilds a odysseus.task.Task from one saved line, e.g. "D | 1 | return book | June 6th".
      * @param line one line from the save file
-     * @return the reconstructed Todo/Deadline/Event
+     * @return the reconstructed odysseus.task.Todo/odysseus.task.Deadline/odysseus.task.Event
      */
     public static Task fromSaveFormat(String line) throws OdysseusException {
         String[] parts = line.split(" \\| ");
@@ -23,14 +27,14 @@ public class TaskFactory {
                 break;
             case "D":
                 if (parts.length < 4) {
-                    throw new OdysseusException("Corrupted save format for Deadline..." +
+                    throw new OdysseusException("Corrupted save format for odysseus.task.Deadline..." +
                             "Please verify line: " + line);
                 }
                 task = new Deadline(parts[2], parts[3]);
                 break;
             case "E":
                 if (parts.length < 5) {
-                    throw new OdysseusException("Corrupted save format for Event..." +
+                    throw new OdysseusException("Corrupted save format for odysseus.task.Event..." +
                             "Please verify line: " + line);
                 }
                 task = new Event(parts[2], parts[3], parts[4]);

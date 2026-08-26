@@ -1,3 +1,5 @@
+package odysseus.task;
+
 /** A task that runs from a start to an end time */
 public class Event extends Task {
     protected String from;

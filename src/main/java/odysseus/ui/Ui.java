@@ -1,3 +1,7 @@
+package odysseus.ui;
+
+import odysseus.task.Task;
+
 import java.util.List;
 import java.util.Scanner;
 
