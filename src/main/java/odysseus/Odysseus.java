@@ -1,7 +1,14 @@
+package odysseus;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
+import odysseus.parser.Command;
+import odysseus.parser.Parser;
+import odysseus.storage.Storage;
+import odysseus.task.Task;
+import odysseus.task.TaskList;
+import odysseus.ui.Ui;
+
 /** The main chatbot: reads commands, manages tasks, prints responses */
 public class Odysseus {
     private final Ui ui;
@@ -41,17 +48,17 @@ public class Odysseus {
 
                 switch (Command.fromInput(command)) {
 
-                    case BYE -> {
+                    case Command.BYE -> {
                         chatting = false;
                         ui.showGoodbye();
                     }
 
-                    case LIST -> {
+                    case Command.LIST -> {
                         // list out tasks
                         ui.showTasks(tasks.getTasks());
                     }
 
-                    case MARK -> {
+                    case Command.MARK -> {
                         int idx = Parser.parseIndex(inputSplit, tasks.size());
                         Task markedTask = tasks.mark(idx);
                         storage.save(tasks.getTasks());
@@ -59,7 +66,7 @@ public class Odysseus {
                         ui.show(msg);
                     }
 
-                    case UNMARK -> {
+                    case Command.UNMARK -> {
                         int idx = Parser.parseIndex(inputSplit, tasks.size());
                         Task unmarkedTask = tasks.unmark(idx);
                         storage.save(tasks.getTasks());
@@ -67,19 +74,19 @@ public class Odysseus {
                         ui.show(msg);
                     }
 
-                    case TODO -> {
+                    case Command.TODO -> {
                         toAdd = Parser.parseTodo(rest);
                     }
 
-                    case DEADLINE -> {
+                    case Command.DEADLINE -> {
                         toAdd = Parser.parseDeadline(rest);
                     }
 
-                    case EVENT -> {
+                    case Command.EVENT -> {
                         toAdd = Parser.parseEvent(rest);
                     }
 
-                    case DELETE -> {
+                    case Command.DELETE -> {
                         int idx = Parser.parseIndex(inputSplit, tasks.size());
                         Task removedTask = tasks.remove(idx);
                         storage.save(tasks.getTasks());
@@ -89,7 +96,7 @@ public class Odysseus {
                         ui.show(msg);
                     }
 
-                    case ON -> {
+                    case Command.ON -> {
                         if (rest.isEmpty()) {
                             throw new OdysseusException("Hey! The date can't be empty...");
                         }
@@ -103,7 +110,7 @@ public class Odysseus {
                         }
                     }
 
-                    case UNKNOWN -> {
+                    case Command.UNKNOWN -> {
                         // Unknown command
                         throw new OdysseusException("Hey! That's not a valid command. Try again.");
                     }
