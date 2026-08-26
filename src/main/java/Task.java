@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 /** A task with a description and done status (the base type) */
 public abstract class Task {
     protected String description;
@@ -21,6 +23,10 @@ public abstract class Task {
     }
 
     public abstract String toSaveFormat();
+
+    public boolean occursOn(LocalDate date) {
+        return false;
+    }
 
     @Override
     public String toString() {

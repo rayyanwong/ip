@@ -1,5 +1,5 @@
 public enum Command {
-    TODO, DEADLINE, EVENT, LIST, MARK, UNMARK, DELETE, BYE, UNKNOWN;
+    TODO, DEADLINE, EVENT, LIST, MARK, UNMARK, DELETE, BYE, ON, UNKNOWN;
 
     /**
      * Maps a raw command word to its Command, case-insensitively.
@@ -17,6 +17,7 @@ public enum Command {
             case "unmark"    -> UNMARK;
             case "delete"    -> DELETE;
             case "bye"      -> BYE;
+            case "on"       -> ON;
             default         -> UNKNOWN;
         };
     }

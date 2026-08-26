@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -166,6 +168,34 @@ public class Odysseus {
                                 "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
                                 removedTask, tasks.size());
                         System.out.println(String.format(MSG_FORMAT, msg));
+                    }
+
+                    case ON -> {
+                        if (rest.isEmpty()) {
+                            throw new OdysseusException("Hey! The date can't be empty...");
+                        }
+                        String onDateStr = rest;
+                        try {
+                           LocalDate onDate = LocalDate.parse(onDateStr);
+                           List<Task> res = new ArrayList<>();
+                           for (Task task : tasks) {
+                              if (task.occursOn(onDate)) {
+                                  res.add(task);
+                              }
+                           }
+                           StringBuilder sb = new StringBuilder();
+                           if (res.isEmpty()) {
+                                System.out.println(String.format(MSG_FORMAT, "No tasks due on date"));
+                           } else {
+                               for (int i = 0; i < res.size(); i++) {
+                                    sb.append((i + 1) + ". " + res.get(i).toString() + "\n");
+                               }
+                               System.out.println(String.format(MSG_FORMAT, sb.toString()));
+                           }
+                        } catch (DateTimeParseException e) {
+                            throw new OdysseusException("Hey! The date can't be parsed..." +
+                                    "Provide in the form of yyyy-mm-dd");
+                        }
                     }
 
                     case UNKNOWN -> {
