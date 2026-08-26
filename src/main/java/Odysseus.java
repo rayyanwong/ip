@@ -2,22 +2,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 /** The main chatbot: reads commands, manages tasks, prints responses */
 public class Odysseus {
-    private static final String NAME = "Odysseus";
-
-    private static final String MSG_FORMAT = """
-        ____________________________________________________________
-        %s
-        ____________________________________________________________
-        """;
-
-    private static final String BYE_MSG = """
-        ____________________________________________________________
-        Bye. Hope to see you again soon!
-        ____________________________________________________________
-        """;
 
     private static final String MARK_MSG = "Nice! I've marked this task as done:%n  %s";
     private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
@@ -47,33 +33,23 @@ public class Odysseus {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         boolean chatting = true;
+        Ui ui = new Ui();
+        ui.showWelcome();
         Storage storage = new Storage();
-        List<Task> tasks;
+
+        List<Task> initial;
         try {
-            tasks = storage.load();
+            initial = storage.load();
         } catch (OdysseusException e) {
-            System.out.println(e.getMessage());
-            tasks = new ArrayList<>();
+            ui.showError(e);
+            initial = new ArrayList<>();
         }
-        String str = String.format("""
-           ___      _                             \s
-          / _ \\  __| |_   _ ___ ___  ___ _   _ ___\s
-         | | | |/ _` | | | / __/ __|/ _ \\ | | / __|
-         | |_| | (_| | |_| \\__ \\__ \\  __/ |_| \\__ \\
-          \\___/ \\__,_|\\__, |___/___/\\___|\\__,_|___/
-                      |___/                       \s
-        ____________________________________________________________
-        Hello! I'm %s
-        What can I do for you?
-        ____________________________________________________________
-        """, NAME);
-        System.out.println(str);
+        TaskList tasks = new TaskList(initial);
 
         while (chatting) {
             try {
-                String input = scanner.nextLine();
+                String input = ui.readCommand();
                 if (input.isBlank()) {
                     throw new OdysseusException("Hey! Please enter a command...");
                 }
@@ -87,36 +63,28 @@ public class Odysseus {
 
                     case BYE -> {
                         chatting = false;
-                        System.out.println(BYE_MSG);
+                        ui.showGoodbye();
                     }
 
                     case LIST -> {
                         // list out tasks
-                        StringBuilder sb = new StringBuilder();
-                        if (tasks.isEmpty()) {
-                            System.out.println(String.format(MSG_FORMAT, "No tasks available"));
-                        } else {
-                            for (int i = 0; i < tasks.size(); i++) {
-                                sb.append((i + 1) + ". " + tasks.get(i).toString() + "\n");
-                            }
-                            System.out.println(String.format(MSG_FORMAT, sb.toString()));
-                        }
+                       ui.showTasks(tasks.getTasks());
                     }
 
                     case MARK -> {
                         int idx = parseIndex(inputSplit, tasks.size());
-                        tasks.get(idx).markAsDone();
-                        storage.save(tasks);
-                        String msg = String.format(MARK_MSG, tasks.get(idx));
-                        System.out.println(String.format(MSG_FORMAT, msg));
+                        Task markedTask = tasks.mark(idx);
+                        storage.save(tasks.getTasks());
+                        String msg = String.format(MARK_MSG, markedTask);
+                        ui.show(msg);
                     }
 
                     case UNMARK -> {
                         int idx = parseIndex(inputSplit, tasks.size());
-                        tasks.get(idx).markAsUndone();
-                        storage.save(tasks);
-                        String msg = String.format(UNMARK_MSG, tasks.get(idx));
-                        System.out.println(String.format(MSG_FORMAT, msg));
+                        Task unmarkedTask = tasks.unmark(idx);
+                        storage.save(tasks.getTasks());
+                        String msg = String.format(UNMARK_MSG, unmarkedTask);
+                        ui.show(msg);
                     }
 
                     case TODO -> {
@@ -163,11 +131,11 @@ public class Odysseus {
                     case DELETE -> {
                         int idx = parseIndex(inputSplit, tasks.size());
                         Task removedTask = tasks.remove(idx);
-                        storage.save(tasks);
+                        storage.save(tasks.getTasks());
                         String msg = String.format(
                                 "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
                                 removedTask, tasks.size());
-                        System.out.println(String.format(MSG_FORMAT, msg));
+                        ui.show(msg);
                     }
 
                     case ON -> {
@@ -177,21 +145,7 @@ public class Odysseus {
                         String onDateStr = rest;
                         try {
                            LocalDate onDate = LocalDate.parse(onDateStr);
-                           List<Task> res = new ArrayList<>();
-                           for (Task task : tasks) {
-                              if (task.occursOn(onDate)) {
-                                  res.add(task);
-                              }
-                           }
-                           StringBuilder sb = new StringBuilder();
-                           if (res.isEmpty()) {
-                                System.out.println(String.format(MSG_FORMAT, "No tasks due on date"));
-                           } else {
-                               for (int i = 0; i < res.size(); i++) {
-                                    sb.append((i + 1) + ". " + res.get(i).toString() + "\n");
-                               }
-                               System.out.println(String.format(MSG_FORMAT, sb.toString()));
-                           }
+                           ui.showTasks(tasks.on(onDate));
                         } catch (DateTimeParseException e) {
                             throw new OdysseusException("Hey! The date can't be parsed..." +
                                     "Provide in the form of yyyy-mm-dd");
@@ -208,11 +162,11 @@ public class Odysseus {
                     String addedMsg = String.format(
                             "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
                             toAdd, tasks.size());
-                    storage.save(tasks);
-                    System.out.println(String.format(MSG_FORMAT, addedMsg));
+                    storage.save(tasks.getTasks());
+                    ui.show(addedMsg);
                 }
             } catch (OdysseusException e) {
-               System.out.println(String.format(MSG_FORMAT, e.getMessage()));
+                ui.showError(e);
             }
         }
     }
