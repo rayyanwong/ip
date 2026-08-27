@@ -37,6 +37,12 @@ not optional.
 
 ## Git
 
+All commit messages in this project MUST follow the SE-EDU Git conventions
+(https://se-education.org/guides/conventions/git.html): an imperative, capitalized
+subject line of at most 50 characters (hard limit 72) with no trailing period, a blank
+line, then a body wrapped at 72 characters explaining WHAT and WHY (not HOW). This is
+not optional.
+
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
