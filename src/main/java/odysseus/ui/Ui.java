@@ -21,6 +21,7 @@ public class Ui {
         ____________________________________________________________
         """;
 
+    /** Constructs the Ui instance. */
     public Ui() {
         this.name = "Odysseus";
     }
