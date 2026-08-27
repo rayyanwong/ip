@@ -6,11 +6,18 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-/** A task that must be done by a specific date/time */
+/** A task that must be done by a specific date/time. */
 public class Deadline extends Task {
     protected LocalDate by;
     private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM d yyyy");
 
+    /**
+     * Constructs the deadline task.
+     *
+     * @param description string description of the task
+     * @param by deadline of the task in format YYYY-MM-DD
+     * @throws OdysseusException if deadline date provided cannot be parsed
+     */
     public Deadline(String description, String by) throws OdysseusException {
         super(description);
         try {
@@ -25,6 +32,11 @@ public class Deadline extends Task {
         return this.by.isEqual(date);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return the deadline encoded as a save-file line
+     */
     @Override
     public String toSaveFormat() {
         return String.format("%s | %d | %s | %s",
