@@ -30,7 +30,7 @@ public class Storage {
      * Returns list of tasks for file path.
      *
      * @return list of tasks extracted from file provided
-     * @throws OdysseusException If there is an IOException while reading the file
+     * @throws OdysseusException if there is an IOException while reading the file
      */
     public List<Task> load() throws OdysseusException {
        // 1. check if the file exist
