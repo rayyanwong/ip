@@ -2,7 +2,9 @@ package odysseus.task;
 
 import java.time.LocalDate;
 
-/** A task with a description and done status (the base type) */
+/**
+ * A task with a description and done status (the base type)
+ */
 public abstract class Task {
     protected String description;
     protected boolean isDone;
@@ -28,6 +30,16 @@ public abstract class Task {
 
     public boolean occursOn(LocalDate date) {
         return false;
+    }
+
+    /**
+     * Returns whether task description contains keyword.
+     *
+     * @param keyword string to check description against
+     * @return whether string in task description
+     */
+    public boolean descriptionContains(String keyword) {
+        return this.description.toLowerCase().contains(keyword.toLowerCase());
     }
 
     @Override

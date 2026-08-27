@@ -2,6 +2,7 @@ package odysseus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+
 import odysseus.parser.Command;
 import odysseus.parser.Parser;
 import odysseus.storage.Storage;
@@ -9,7 +10,9 @@ import odysseus.task.Task;
 import odysseus.task.TaskList;
 import odysseus.ui.Ui;
 
-/** The main chatbot: reads commands, manages tasks, prints responses */
+/**
+ * The main chatbot: reads commands, manages tasks, prints responses
+ */
 public class Odysseus {
     private final Ui ui;
     private final Storage storage;
@@ -108,6 +111,13 @@ public class Odysseus {
                             throw new OdysseusException("Hey! The date can't be parsed..." +
                                     "Provide in the form of yyyy-mm-dd");
                         }
+                    }
+
+                    case Command.FIND -> {
+                        if (rest.isEmpty()) {
+                            throw new OdysseusException("Hey! The keyword to find can't be empty...");
+                        }
+                        ui.showTasks(tasks.find(rest));
                     }
 
                     case Command.UNKNOWN -> {
