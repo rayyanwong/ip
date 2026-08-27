@@ -5,6 +5,10 @@ import odysseus.task.Task;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Handles all user interaction: reading commands from standard input
+ * and printing formatted output to the CLI.
+ */
 public class Ui {
 
     protected final String name;
@@ -21,10 +25,16 @@ public class Ui {
         this.name = "Odysseus";
     }
 
+    /**
+     * Reads the next line of user input from standard input.
+     *
+     * @return the raw command line entered by the user
+     */
     public String readCommand() {
         return scanner.nextLine();
     }
 
+    /** Prints welcome banner and introduction. */
     public void showWelcome() {
        String str = String.format("""
            ___      _                             \s
@@ -41,18 +51,34 @@ public class Ui {
        System.out.println(str);
    }
 
+    /**
+     * Prints the message to CLI.
+     *
+     * @param msg message to show
+     */
    public void show(String msg) {
        System.out.println(String.format(MSG_FORMAT, msg));
    }
 
+   /** Prints goodbye message. */
    public void showGoodbye() {
        this.show(BYE_MSG);
    }
 
+    /**
+     * Prints the error message to CLI.
+     *
+     * @param e exception which message is to be shown
+     */
    public void showError(Exception e) {
        System.out.println(String.format(MSG_FORMAT, e.getMessage()));
    }
 
+    /**
+     * Prints all tasks in list.
+     *
+     * @param list list of task to show
+     */
    public void showTasks(List<Task> list) {
        if (list.isEmpty())  {
            show("No tasks available");
