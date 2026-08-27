@@ -16,7 +16,9 @@ public class TaskList {
     /**
      * Creates a tasklist object with empty list.
      */
-    public TaskList() { this.tasks = new ArrayList<>(); }
+    public TaskList() {
+        this.tasks = new ArrayList<>();
+    }
 
     /**
      * Creates a tasklist object with an initial task list.
@@ -99,6 +101,22 @@ public class TaskList {
         List<Task> res = new ArrayList<>();
         for (Task task : tasks) {
             if (task.occursOn(date)) {
+                res.add(task);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Returns task list with keyword in description.
+     *
+     * @param keyword string to check description against
+     * @return list of tasks with description containing string
+     */
+    public List<Task> find(String keyword) {
+        List<Task> res = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.descriptionContains(keyword)) {
                 res.add(task);
             }
         }

@@ -119,6 +119,13 @@ public class Odysseus {
                         }
                     }
 
+                    case Command.FIND -> {
+                        if (rest.isEmpty()) {
+                            throw new OdysseusException("Hey! The keyword to find can't be empty...");
+                        }
+                        ui.showTasks(tasks.find(rest));
+                    }
+
                     case Command.UNKNOWN -> {
                         throw new OdysseusException("Hey! That's not a valid command. Try again.");
                     }
