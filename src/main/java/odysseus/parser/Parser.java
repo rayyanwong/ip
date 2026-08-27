@@ -5,6 +5,7 @@ import odysseus.task.Deadline;
 import odysseus.task.Event;
 import odysseus.task.Todo;
 
+/** Handles parsing of input provided by user. */
 public class Parser {
 
     private Parser() {}
@@ -34,7 +35,11 @@ public class Parser {
     }
 
     /**
-     * Builds a odysseus.task.Todo from the argument text.
+     * Builds a todo from the argument text.
+     *
+     * @param rest description of Todo
+     * @return todo task
+     * @throws OdysseusException if description is empty
      */
     public static Todo parseTodo(String rest) throws OdysseusException {
         // guard empty description, then: return new odysseus.task.Todo(rest);
@@ -45,7 +50,11 @@ public class Parser {
     }
 
     /**
-     * Builds a odysseus.task.Deadline from "<desc> /by <date>".
+     * Builds a deadline from argument text.
+     *
+     * @param rest string with description and deadline
+     * @return deadline task
+     * @throws OdysseusException if description or /by is empty
      */
     public static Deadline parseDeadline(String rest) throws OdysseusException {
         // split " /by ", guard length + empties, then: return new odysseus.task.Deadline(desc, by);
@@ -63,7 +72,11 @@ public class Parser {
     }
 
     /**
-     * Builds an odysseus.task.Event from "<desc> /from <start> /to <end>".
+     * Builds an event from argument text.
+     *
+     * @param rest string with description, /from and /to
+     * @return event task
+     * @throws OdysseusException if description, /from or /to is empty
      */
     public static Event parseEvent(String rest) throws OdysseusException {
         // split " /from ", then " /to ", guard length + empties, then: return new odysseus.task.Event(...);
