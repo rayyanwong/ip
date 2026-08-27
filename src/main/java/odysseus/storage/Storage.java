@@ -10,13 +10,28 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles all storage tasks: saving tasks to file and
+ * loading of tasks from file.
+ */
 public class Storage {
     private final Path path;
 
+    /**
+     * Creates a Storage backed by the given file path.
+     *
+     * @param filePath string of filePath for storage
+     */
     public Storage(String filePath) {
         this.path = Path.of(filePath);
     }
 
+    /**
+     * Returns list of tasks for file path.
+     *
+     * @return list of tasks extracted from file provided
+     * @throws OdysseusException if there is an IOException while reading the file
+     */
     public List<Task> load() throws OdysseusException {
        // 1. check if the file exist
         if (Files.exists(path)) {
@@ -38,6 +53,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves a list of tasks into file path.
+     *
+     * @param tasks list of task to save into file
+     * @throws OdysseusException if there is an IOException while writing to file
+     */
     public void save(List<Task> tasks) throws OdysseusException {
         // 1. go through the task and convert each task into it's save format
         // 2. write the List<String> into file

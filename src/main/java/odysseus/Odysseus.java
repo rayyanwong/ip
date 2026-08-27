@@ -9,7 +9,7 @@ import odysseus.task.Task;
 import odysseus.task.TaskList;
 import odysseus.ui.Ui;
 
-/** The main chatbot: reads commands, manages tasks, prints responses */
+/** The main chatbot: reads commands, manages tasks, prints responses. */
 public class Odysseus {
     private final Ui ui;
     private final Storage storage;
@@ -18,6 +18,11 @@ public class Odysseus {
     private static final String MARK_MSG = "Nice! I've marked this task as done:%n  %s";
     private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
 
+    /**
+     * Constructs Odysseus cli backed by a given filePath.
+     *
+     * @param filePath string representing file path of storage
+     */
     public Odysseus(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -31,6 +36,9 @@ public class Odysseus {
         tasks = loaded;
     }
 
+    /**
+     * Starts the chatting interface.
+     */
     public void run() {
         boolean chatting = true;
         ui.showWelcome();
@@ -129,6 +137,11 @@ public class Odysseus {
         }
     }
 
+    /**
+     * The main entry point for the application.
+     *
+     * @param args command-line arguments passed to the program
+     */
     public static void main(String[] args) {
         new Odysseus("data/odysseus.txt").run();
     }

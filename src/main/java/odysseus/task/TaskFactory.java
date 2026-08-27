@@ -2,14 +2,17 @@ package odysseus.task;
 
 import odysseus.OdysseusException;
 
+/** Factory class responsible for creating Todo/Deadline/Event from save-friendly line. */
 public class TaskFactory {
 
     private TaskFactory() {}
 
     /**
-     * Rebuilds a odysseus.task.Task from one saved line, e.g. "D | 1 | return book | June 6th".
+     * Rebuilds a Task from one saved line.
+     *
      * @param line one line from the save file
-     * @return the reconstructed odysseus.task.Todo/odysseus.task.Deadline/odysseus.task.Event
+     * @return the reconstructed Todo/Deadline/Event
+     * @throws OdysseusException if the line is not in a parsable save format
      */
     public static Task fromSaveFormat(String line) throws OdysseusException {
         String[] parts = line.split(" \\| ");
