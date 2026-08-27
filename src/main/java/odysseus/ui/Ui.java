@@ -26,7 +26,7 @@ public class Ui {
     }
 
     public void showWelcome() {
-       String str = String.format("""
+        String str = String.format("""
            ___      _                             \s
           / _ \\  __| |_   _ ___ ___  ___ _   _ ___\s
          | | | |/ _` | | | / __/ __|/ _ \\ | | / __|
@@ -38,31 +38,30 @@ public class Ui {
         What can I do for you?
         ____________________________________________________________
         """, this.name);
-       System.out.println(str);
-   }
+        System.out.println(str);
+    }
 
-   public void show(String msg) {
-       System.out.println(String.format(MSG_FORMAT, msg));
-   }
+    public void show(String msg) {
+        System.out.println(String.format(MSG_FORMAT, msg));
+    }
 
-   public void showGoodbye() {
-       this.show(BYE_MSG);
-   }
+    public void showGoodbye() {
+        this.show(BYE_MSG);
+    }
 
-   public void showError(Exception e) {
-       System.out.println(String.format(MSG_FORMAT, e.getMessage()));
-   }
+    public void showError(Exception e) {
+        System.out.println(String.format(MSG_FORMAT, e.getMessage()));
+    }
 
-   public void showTasks(List<Task> list) {
-       if (list.isEmpty())  {
-           show("No tasks available");
-       } else {
-           StringBuilder sb = new StringBuilder();
-           for (int i = 0; i < list.size(); i++) {
-               sb.append((i + 1) + ". " + list.get(i) + "\n");
-           }
-           show(sb.toString());
-       }
-   }
-
+    public void showTasks(List<Task> list) {
+        if (list.isEmpty()) {
+            show("No tasks available");
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < list.size(); i++) {
+                sb.append((i + 1) + ". " + list.get(i) + "\n");
+            }
+            show(sb.toString());
+        }
+    }
 }

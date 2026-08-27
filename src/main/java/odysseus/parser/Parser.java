@@ -7,7 +7,8 @@ import odysseus.task.Todo;
 
 public class Parser {
 
-    private Parser() {}
+    private Parser() {
+    }
 
     /**
      * Validates and converts a user-entered task number into a 0-based array index.
@@ -37,7 +38,6 @@ public class Parser {
      * Builds a odysseus.task.Todo from the argument text.
      */
     public static Todo parseTodo(String rest) throws OdysseusException {
-        // guard empty description, then: return new odysseus.task.Todo(rest);
         if (rest.isEmpty()) {
             throw new OdysseusException("Hey! The description can't be empty...");
         }
@@ -48,7 +48,6 @@ public class Parser {
      * Builds a odysseus.task.Deadline from "<desc> /by <date>".
      */
     public static Deadline parseDeadline(String rest) throws OdysseusException {
-        // split " /by ", guard length + empties, then: return new odysseus.task.Deadline(desc, by);
         String[] parts = rest.split(" /by ");
         if (parts.length < 2) {
             throw new OdysseusException("Hey! A deadline needs a /by time...");
@@ -66,7 +65,6 @@ public class Parser {
      * Builds an odysseus.task.Event from "<desc> /from <start> /to <end>".
      */
     public static Event parseEvent(String rest) throws OdysseusException {
-        // split " /from ", then " /to ", guard length + empties, then: return new odysseus.task.Event(...);
         String[] fromParts = rest.split(" /from ");
         if (fromParts.length < 2) {
             throw new OdysseusException("Hey! An event needs a /from start time...");

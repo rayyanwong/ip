@@ -11,16 +11,16 @@ public enum Command {
      */
     public static Command fromInput(String word) {
         return switch (word.toLowerCase()) {
-            case "todo"     -> TODO;
+            case "todo" -> TODO;
             case "deadline" -> DEADLINE;
-            case "event"    -> EVENT;
-            case "list"    -> LIST;
-            case "mark"    -> MARK;
-            case "unmark"    -> UNMARK;
-            case "delete"    -> DELETE;
-            case "bye"      -> BYE;
-            case "on"       -> ON;
-            default         -> UNKNOWN;
+            case "event" -> EVENT;
+            case "list" -> LIST;
+            case "mark" -> MARK;
+            case "unmark" -> UNMARK;
+            case "delete" -> DELETE;
+            case "bye" -> BYE;
+            case "on" -> ON;
+            default -> UNKNOWN;
         };
     }
 }

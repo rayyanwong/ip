@@ -18,9 +18,7 @@ public class Storage {
     }
 
     public List<Task> load() throws OdysseusException {
-       // 1. check if the file exist
         if (Files.exists(path)) {
-            // 2. load the line
             try {
                 List<String> lines = Files.readAllLines(path);
                 List<Task> tasks = new ArrayList<>();
@@ -39,8 +37,6 @@ public class Storage {
     }
 
     public void save(List<Task> tasks) throws OdysseusException {
-        // 1. go through the task and convert each task into it's save format
-        // 2. write the List<String> into file
         List<String> lines = new ArrayList<>();
         for (Task task : tasks) {
             String saveStr = task.toSaveFormat();

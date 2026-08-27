@@ -4,10 +4,12 @@ import odysseus.OdysseusException;
 
 public class TaskFactory {
 
-    private TaskFactory() {}
+    private TaskFactory() {
+    }
 
     /**
      * Rebuilds a odysseus.task.Task from one saved line, e.g. "D | 1 | return book | June 6th".
+     *
      * @param line one line from the save file
      * @return the reconstructed odysseus.task.Todo/odysseus.task.Deadline/odysseus.task.Event
      */
@@ -18,7 +20,7 @@ public class TaskFactory {
             throw new OdysseusException("Corrupted save format...Please verify line: " + line);
         }
         String marker = parts[0].strip();
-        boolean isDone =  parts[1].strip().equals("1");
+        boolean isDone = parts[1].strip().equals("1");
 
         Task task;
         switch (marker) {
