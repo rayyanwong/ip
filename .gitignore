@@ -24,3 +24,6 @@ text-ui-test/EXPECTED-UNIX.TXT
 
 # Runtime save file
 data/
+
+# Claude folder
+.claude/

@@ -1,4 +1,5 @@
 package odysseus.task;
+
 import odysseus.OdysseusException;
 import org.junit.jupiter.api.Test;
 

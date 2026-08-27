@@ -12,17 +12,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class TaskListTest {
     @Test
     public void add_newTask_increasesSize() {
-        TaskList l = new TaskList();
-        l.add(new Todo("x"));
-        assertEquals(1, l.size());
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("x"));
+        assertEquals(1, taskList.size());
     }
 
     @Test
     public void remove_validIndex_returnsRemovedTaskAndShrinksList() {
-        TaskList l = new TaskList();
-        l.add(new Todo("x"));
-        Task removedTask = l.remove(0);
-        assertEquals(0, l.getTasks().size());
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("x"));
+        Task removedTask = taskList.remove(0);
+        assertEquals(0, taskList.getTasks().size());
         assertEquals("T | 0 | x", removedTask.toSaveFormat());
     }
 
@@ -63,6 +63,6 @@ public class TaskListTest {
         taskList.add(new Deadline("x", "2026-06-07"));
         taskList.add(new Todo("x"));
         assertEquals(1,
-                taskList.on(LocalDate.of(2026,6,6)).size());
+                taskList.on(LocalDate.of(2026, 6, 6)).size());
     }
 }

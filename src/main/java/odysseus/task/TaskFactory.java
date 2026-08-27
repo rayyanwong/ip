@@ -2,10 +2,13 @@ package odysseus.task;
 
 import odysseus.OdysseusException;
 
-/** Factory class responsible for creating Todo/Deadline/Event from save-friendly line. */
+/**
+ * Factory class responsible for creating Todo/Deadline/Event from save-friendly line.
+ */
 public class TaskFactory {
 
-    private TaskFactory() {}
+    private TaskFactory() {
+    }
 
     /**
      * Rebuilds a Task from one saved line.
@@ -21,7 +24,7 @@ public class TaskFactory {
             throw new OdysseusException("Corrupted save format...Please verify line: " + line);
         }
         String marker = parts[0].strip();
-        boolean isDone =  parts[1].strip().equals("1");
+        boolean isDone = parts[1].strip().equals("1");
 
         Task task;
         switch (marker) {
