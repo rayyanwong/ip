@@ -16,7 +16,7 @@ import odysseus.Odysseus;
  */
 public class Main extends Application {
 
-    private Odysseus odysseus = new Odysseus("data/odysseus.txt");
+    private Odysseus odysseus = new Odysseus(Odysseus.DEFAULT_STORAGE);
 
     @Override
     public void start(Stage stage) {
@@ -25,6 +25,7 @@ public class Main extends Application {
                     getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
+            stage.setTitle("Odysseus");
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);

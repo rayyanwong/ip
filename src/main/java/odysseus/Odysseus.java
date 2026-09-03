@@ -23,6 +23,7 @@ public class Odysseus {
     private static final String MARK_MSG = "Nice! I've marked this task as done:%n  %s";
     private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
     private static final String BYE_MSG = "Bye. Hope to see you again soon!";
+    public static final String DEFAULT_STORAGE = "data/odysseus.txt";
 
     /**
      * Constructs Odysseus cli backed by a given filePath.
@@ -186,6 +187,6 @@ public class Odysseus {
      * @param args command-line arguments passed to the program
      */
     public static void main(String[] args) {
-        new Odysseus("data/odysseus.txt").run();
+        new Odysseus(DEFAULT_STORAGE).run();
     }
 }

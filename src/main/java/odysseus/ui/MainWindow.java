@@ -29,6 +29,7 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Odysseus odysseus;
+    private static final double EXIT_DELAY_SECONDS = 1.5;
 
     private Image userImage = new Image(this.getClass()
             .getResourceAsStream("/images/userImg.png"));
@@ -52,6 +53,12 @@ public class MainWindow extends AnchorPane {
         odysseus = o;
     }
 
+    private void handleExit() {
+        PauseTransition delay = new PauseTransition(Duration.seconds(EXIT_DELAY_SECONDS));
+        delay.setOnFinished(event -> Platform.exit());
+        delay.play();
+    }
+
     /**
      * Handles one round of user input.
      *
@@ -70,9 +77,7 @@ public class MainWindow extends AnchorPane {
         userInput.clear();
 
         if (odysseus.isExit()) {
-            PauseTransition delay = new PauseTransition(Duration.seconds(1.5));
-            delay.setOnFinished(event -> Platform.exit());
-            delay.play();
+            handleExit();
         }
     }
 }
