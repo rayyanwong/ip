@@ -1,0 +1,96 @@
+/*
+ * Telegram-inspired dark theme for Odysseus.
+ * Palette:
+ *   background       #17212b  greyish navy
+ *   Odysseus bubble  #232e3c  lighter greyish navy (incoming)
+ *   user bubble      #2b5278  dark blue (outgoing)
+ */
+
+/* The scene root (the AnchorPane) — overall background. */
+.root {
+    -fx-background-color: #17212b;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+/* Make the ScrollPane and its viewport transparent so the background shows. */
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane:focused {
+    -fx-background-color: transparent;
+}
+
+/* Slim, dark scrollbar to match the theme. */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #3a4a5c;
+    -fx-background-radius: 4;
+}
+
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button,
+.scroll-pane .scroll-bar .increment-arrow,
+.scroll-pane .scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+}
+
+/* Base chat bubble (applied to every message label). */
+.bubble {
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 14;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+}
+
+/* Odysseus (incoming) — greyish navy. */
+.odysseus-bubble {
+    -fx-background-color: #232e3c;
+    -fx-text-fill: #e8eaed;
+}
+
+/* User (outgoing) — dark blue. */
+.user-bubble {
+    -fx-background-color: #2b5278;
+    -fx-text-fill: #ffffff;
+}
+
+/* Message input field. */
+.text-field {
+    -fx-background-color: #232e3c;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #7d8b99;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-font-size: 14px;
+    -fx-padding: 0 12 0 12;
+}
+
+/* Send button. */
+.button {
+    -fx-background-color: #2b5278;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 0;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3a6a9a;
+}
+
+.button:pressed {
+    -fx-background-color: #24466b;
+}
