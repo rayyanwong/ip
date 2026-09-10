@@ -49,8 +49,8 @@ public class MainWindow extends AnchorPane {
      *
      * @param o the chatbot logic instance
      */
-    public void setOdysseus(Odysseus o) {
-        odysseus = o;
+    public void setOdysseus(Odysseus odysseus) {
+        this.odysseus = odysseus;
     }
 
     private void handleExit() {
