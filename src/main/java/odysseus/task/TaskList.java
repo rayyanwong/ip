@@ -100,13 +100,9 @@ public class TaskList {
      */
     public List<Task> on(LocalDate date) {
         assert date != null : "on called with a null date";
-        List<Task> res = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.occursOn(date)) {
-                res.add(task);
-            }
-        }
-        return res;
+        return tasks.stream()
+                .filter(task -> task.occursOn(date))
+                .toList();
     }
 
     /**
@@ -117,13 +113,9 @@ public class TaskList {
      */
     public List<Task> find(String keyword) {
         assert keyword != null : "find keyword is null";
-        List<Task> res = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.descriptionContains(keyword)) {
-                res.add(task);
-            }
-        }
-        return res;
+        return tasks.stream()
+                .filter(task -> task.descriptionContains(keyword))
+                .toList();
     }
 
 }
