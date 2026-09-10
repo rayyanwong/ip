@@ -1,8 +1,5 @@
 package odysseus.ui;
 
-import odysseus.task.Task;
-
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -14,7 +11,6 @@ public class Ui {
     protected final String name;
     protected final Scanner scanner = new Scanner(System.in);
 
-    private static final String BYE_MSG = "Bye. Hope to see you again soon!";
     private static final String MSG_FORMAT = """
             ____________________________________________________________
             %s
@@ -66,13 +62,6 @@ public class Ui {
     }
 
     /**
-     * Prints goodbye message.
-     */
-    public void showGoodbye() {
-        this.show(BYE_MSG);
-    }
-
-    /**
      * Prints the error message to CLI.
      *
      * @param e exception which message is to be shown
@@ -80,22 +69,4 @@ public class Ui {
     public void showError(Exception e) {
         System.out.println(String.format(MSG_FORMAT, e.getMessage()));
     }
-
-    /**
-     * Prints all tasks in list.
-     *
-     * @param list list of task to show
-     */
-    public void showTasks(List<Task> list) {
-        if (list.isEmpty()) {
-            show("No tasks available");
-        } else {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < list.size(); i++) {
-                sb.append((i + 1) + ". " + list.get(i) + "\n");
-            }
-            show(sb.toString());
-        }
-    }
-
 }

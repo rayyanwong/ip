@@ -24,6 +24,7 @@ public class Odysseus {
     private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
     private static final String BYE_MSG = "Bye. Hope to see you again soon!";
     public static final String DEFAULT_STORAGE = "data/odysseus.txt";
+    private static final String ADD_MSG = "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.";
 
     /**
      * Constructs Odysseus cli backed by a given filePath.
@@ -72,93 +73,78 @@ public class Odysseus {
             String command = inputSplit[0];
             String rest = input.substring(command.length()).trim();
 
-            Task toAdd = null;
-
-            switch (Command.fromInput(command)) {
-
-                case Command.BYE -> {
-                    this.isExit = true;
-                    return BYE_MSG;
-                }
-
-                case Command.LIST -> {
-                    return formatTasks(tasks.getTasks());
-                }
-
-                case Command.MARK -> {
-                    int idx = Parser.parseIndex(inputSplit, tasks.size());
-                    Task markedTask = tasks.mark(idx);
-                    storage.save(tasks.getTasks());
-                    String msg = String.format(MARK_MSG, markedTask);
-                    return msg;
-                }
-
-                case Command.UNMARK -> {
-                    int idx = Parser.parseIndex(inputSplit, tasks.size());
-                    Task unmarkedTask = tasks.unmark(idx);
-                    storage.save(tasks.getTasks());
-                    String msg = String.format(UNMARK_MSG, unmarkedTask);
-                    return msg;
-                }
-
-                case Command.TODO -> {
-                    toAdd = Parser.parseTodo(rest);
-                }
-
-                case Command.DEADLINE -> {
-                    toAdd = Parser.parseDeadline(rest);
-                }
-
-                case Command.EVENT -> {
-                    toAdd = Parser.parseEvent(rest);
-                }
-
-                case Command.DELETE -> {
-                    int idx = Parser.parseIndex(inputSplit, tasks.size());
-                    Task removedTask = tasks.remove(idx);
-                    storage.save(tasks.getTasks());
-                    String msg = String.format(
-                            "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
-                            removedTask, tasks.size());
-                    return msg;
-                }
-
-                case Command.ON -> {
-                    if (rest.isEmpty()) {
-                        throw new OdysseusException("Hey! The date can't be empty...");
-                    }
-                    try {
-                        LocalDate onDate = LocalDate.parse(rest);
-                        return formatTasks(tasks.on(onDate));
-                    } catch (DateTimeParseException e) {
-                        throw new OdysseusException("Hey! The date can't be parsed..." +
-                                "Provide in the form of yyyy-mm-dd");
-                    }
-                }
-
-                case Command.FIND -> {
-                    if (rest.isEmpty()) {
-                        throw new OdysseusException("Hey! The keyword to find can't be empty...");
-                    }
-                    return formatTasks(tasks.find(rest));
-                }
-
+            return switch (Command.fromInput(command)) {
+                case Command.BYE -> handleBye();
+                case Command.LIST -> formatTasks(tasks.getTasks());
+                case Command.MARK -> handleMark(inputSplit);
+                case Command.UNMARK -> handleUnmark(inputSplit);
+                case Command.TODO -> handleAdd(Parser.parseTodo(rest));
+                case Command.DEADLINE -> handleAdd(Parser.parseDeadline(rest));
+                case Command.EVENT -> handleAdd(Parser.parseEvent(rest));
+                case Command.DELETE -> handleDelete(inputSplit);
+                case Command.ON -> handleOn(rest);
+                case Command.FIND -> handleFind(rest);
                 case Command.UNKNOWN -> {
                     throw new OdysseusException("Hey! That's not a valid command. Try again.");
                 }
-            }
-            if (toAdd != null) {
-                tasks.add(toAdd);
-                String addedMsg = String.format(
-                        "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.",
-                        toAdd, tasks.size());
-                storage.save(tasks.getTasks());
-                return addedMsg;
-            }
+            };
         } catch (OdysseusException e) {
             return e.getMessage();
         }
-        return "";
+    }
+
+    private String handleBye() {
+        this.isExit = true;
+        return BYE_MSG;
+    }
+
+    private String handleMark(String[] inputSplit) throws OdysseusException {
+        int idx = Parser.parseIndex(inputSplit, tasks.size());
+        Task markedTask = tasks.mark(idx);
+        storage.save(tasks.getTasks());
+        return String.format(MARK_MSG, markedTask);
+    }
+
+    private String handleUnmark(String[] inputSplit) throws OdysseusException {
+        int idx = Parser.parseIndex(inputSplit, tasks.size());
+        Task unmarkedTask = tasks.unmark(idx);
+        storage.save(tasks.getTasks());
+        return String.format(UNMARK_MSG, unmarkedTask);
+    }
+
+    private String handleDelete(String[] inputSplit) throws OdysseusException {
+        int idx = Parser.parseIndex(inputSplit, tasks.size());
+        Task removedTask = tasks.remove(idx);
+        storage.save(tasks.getTasks());
+        return String.format(
+                "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
+                removedTask, tasks.size());
+    }
+
+    private String handleOn(String rest) throws OdysseusException {
+        if (rest.isEmpty()) {
+            throw new OdysseusException("Hey! The date can't be empty...");
+        }
+        try {
+            LocalDate onDate = LocalDate.parse(rest);
+            return formatTasks(tasks.on(onDate));
+        } catch (DateTimeParseException e) {
+            throw new OdysseusException("Hey! The date can't be parsed..." +
+                    "Provide in the form of yyyy-mm-dd");
+        }
+    }
+
+    private String handleFind(String rest) throws OdysseusException {
+        if (rest.isEmpty()) {
+            throw new OdysseusException("Hey! The keyword to find can't be empty...");
+        }
+        return formatTasks(tasks.find(rest));
+    }
+
+    private String handleAdd(Task toAdd) throws OdysseusException {
+        tasks.add(toAdd);
+        storage.save(tasks.getTasks());
+        return String.format(ADD_MSG, toAdd, tasks.size());
     }
 
     /**
