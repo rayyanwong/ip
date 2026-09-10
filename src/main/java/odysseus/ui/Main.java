@@ -17,6 +17,8 @@ import odysseus.Odysseus;
 public class Main extends Application {
 
     private Odysseus odysseus = new Odysseus(Odysseus.DEFAULT_STORAGE);
+    private static final double MIN_WINDOW_HEIGHT = 220;
+    private static final double MIN_WINDOW_WIDTH = 417;
 
     @Override
     public void start(Stage stage) {
@@ -29,8 +31,8 @@ public class Main extends Application {
                     Main.class.getResource("/view/styles.css").toExternalForm());
             stage.setTitle("Odysseus");
             stage.setScene(scene);
-            stage.setMinHeight(220);
-            stage.setMinWidth(417);
+            stage.setMinHeight(MIN_WINDOW_HEIGHT);
+            stage.setMinWidth(MIN_WINDOW_WIDTH);
             fxmlLoader.<MainWindow>getController().setOdysseus(odysseus);  // inject the Odysseus instance
             stage.show();
         } catch (IOException e) {

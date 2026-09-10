@@ -50,14 +50,11 @@ public class TaskList {
         return this.tasks.remove(idx);
     }
 
-    /** Returns size of tasklist. */
+    /**
+     * Returns size of tasklist.
+     */
     public int size() {
         return this.tasks.size();
-    }
-
-    /** Returns whether tasklist is empty. */
-    public boolean isEmpty() {
-        return this.tasks.isEmpty();
     }
 
     /**
