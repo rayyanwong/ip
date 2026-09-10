@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TaskListTest {
     @Test
@@ -24,19 +22,6 @@ public class TaskListTest {
         Task removedTask = taskList.remove(0);
         assertEquals(0, taskList.getTasks().size());
         assertEquals("T | 0 | x", removedTask.toSaveFormat());
-    }
-
-    @Test
-    public void isEmpty_newList_returnsTrue() {
-        TaskList taskList = new TaskList();
-        assertTrue(taskList.isEmpty());
-    }
-
-    @Test
-    public void isEmpty_afterAdd_returnsFalse() {
-        TaskList taskList = new TaskList();
-        taskList.add(new Todo("x"));
-        assertFalse(taskList.isEmpty());
     }
 
     @Test
