@@ -58,11 +58,9 @@ public class Storage {
      * @throws OdysseusException if there is an IOException while writing to file
      */
     public void save(List<Task> tasks) throws OdysseusException {
-        List<String> lines = new ArrayList<>();
-        for (Task task : tasks) {
-            String saveStr = task.toSaveFormat();
-            lines.add(saveStr);
-        }
+        List<String> lines = tasks.stream()
+                .map(Task::toSaveFormat)
+                .toList();
         try {
             Files.createDirectories(path.getParent());
             Files.write(path, lines);

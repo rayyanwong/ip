@@ -98,13 +98,9 @@ public class TaskList {
      * @return list of tasks that occurs on given date
      */
     public List<Task> on(LocalDate date) {
-        List<Task> res = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.occursOn(date)) {
-                res.add(task);
-            }
-        }
-        return res;
+        return tasks.stream()
+                .filter(task -> task.occursOn(date))
+                .toList();
     }
 
     /**
@@ -114,13 +110,9 @@ public class TaskList {
      * @return list of tasks with description containing string
      */
     public List<Task> find(String keyword) {
-        List<Task> res = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.descriptionContains(keyword)) {
-                res.add(task);
-            }
-        }
-        return res;
+        return tasks.stream()
+                .filter(task -> task.descriptionContains(keyword))
+                .toList();
     }
 
 }
