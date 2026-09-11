@@ -1,5 +1,7 @@
 package odysseus.task;
 
+import odysseus.OdysseusException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -116,6 +118,22 @@ public class TaskList {
         return tasks.stream()
                 .filter(task -> task.descriptionContains(keyword))
                 .toList();
+    }
+
+    /**
+     * Updates a field of the task at the given index.
+     *
+     * @param idx   index of the task using 0-based indexing
+     * @param flag  the field to update (e.g. {@code /desc}, {@code /by})
+     * @param value the new value for that field
+     * @return the updated task
+     * @throws OdysseusException if the flag is not applicable to the task type
+     */
+    public Task update(int idx, String flag, String value) throws OdysseusException {
+        assert idx >= 0 && idx < tasks.size() : "update called with out-of-range index: " + idx;
+        Task task = this.tasks.get(idx);
+        task.update(flag, value);
+        return task;
     }
 
 }

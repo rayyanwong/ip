@@ -1,5 +1,7 @@
 package odysseus.task;
 
+import odysseus.OdysseusException;
+
 /** A task that runs from a start to an end time. */
 public class Event extends Task {
     protected String from;
@@ -16,6 +18,17 @@ public class Event extends Task {
         super(description);
         this.from = from;
         this.to = to;
+    }
+
+    @Override
+    public void update(String flag, String value) throws OdysseusException {
+        if (flag.equals("/from")) {
+            this.from = value;
+        } else if (flag.equals("/to")) {
+            this.to = value;
+        } else {
+            super.update(flag, value);
+        }
     }
 
     /**

@@ -25,6 +25,7 @@ public class Odysseus {
     private static final String BYE_MSG = "Bye. Hope to see you again soon!";
     public static final String DEFAULT_STORAGE = "data/odysseus.txt";
     private static final String ADD_MSG = "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.";
+    private static final String UPDATE_MSG = "Updated task %d:%n  %s";
 
     /**
      * Constructs Odysseus cli backed by a given filePath.
@@ -84,6 +85,7 @@ public class Odysseus {
                 case Command.DELETE -> handleDelete(inputSplit);
                 case Command.ON -> handleOn(rest);
                 case Command.FIND -> handleFind(rest);
+                case Command.UPDATE -> handleUpdate(inputSplit, rest);
                 case Command.UNKNOWN -> {
                     throw new OdysseusException("Hey! That's not a valid command. Try again.");
                 }
@@ -145,6 +147,19 @@ public class Odysseus {
         tasks.add(toAdd);
         storage.save(tasks.getTasks());
         return String.format(ADD_MSG, toAdd, tasks.size());
+    }
+
+    private String handleUpdate(String[] inputSplit, String rest) throws OdysseusException {
+        int idx = Parser.parseIndex(inputSplit, tasks.size());   // reuse: validates + throws on bad index
+        String[] parts = rest.split(" ", 3);       // [index, flag, value]
+        if (parts.length < 3 || parts[2].isBlank()) {
+            throw new OdysseusException("Hey! Usage: update INDEX /desc|/by|/from|/to NEW_VALUE...");
+        }
+        String flag = parts[1];
+        String value = parts[2];
+        Task updated = tasks.update(idx, flag, value);
+        storage.save(tasks.getTasks());
+        return String.format(UPDATE_MSG, idx + 1, updated);
     }
 
     /**

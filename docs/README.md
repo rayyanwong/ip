@@ -20,9 +20,22 @@ Example: `keyword (optional arguments)`
 expected output
 ```
 
-## Feature ABC
+## Updating a task
 
-// Feature details
+Edits a field of an existing task in place, without deleting and re-adding it.
+
+Format: `update INDEX /FLAG NEW_VALUE`
+
+- `/desc` — change the description (any task type)
+- `/by` — change a deadline's date (Deadline only, `YYYY-MM-DD`)
+- `/from`, `/to` — change an event's start/end (Event only)
+
+Example: `update 2 /desc buy oat milk`
+
+```
+Updated task 2:
+  [D][ ] buy oat milk (by: Jun 6 2026)
+```
 
 
 ## Feature XYZ

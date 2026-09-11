@@ -47,6 +47,19 @@ public class Deadline extends Task {
     }
 
     @Override
+    public void update(String flag, String value) throws OdysseusException {
+        if (flag.equals("/by")) {
+            try {
+                this.by = LocalDate.parse(value);
+            } catch (DateTimeParseException e) {
+                throw new OdysseusException("Invalid by input, please give in the format of YYYY-MM-DD...");
+            }
+        } else {
+            super.update(flag, value);
+        }
+    }
+
+    @Override
     public String toString() {
         return "[D]" + super.toString() +
                 " (by: " + this.by.format(DISPLAY_FORMAT) + ")";

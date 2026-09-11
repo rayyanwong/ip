@@ -2,7 +2,7 @@ package odysseus.parser;
 
 /** Represents the commands that the user can use. */
 public enum Command {
-    TODO, DEADLINE, EVENT, LIST, MARK, UNMARK, DELETE, BYE, ON, FIND, UNKNOWN;
+    TODO, DEADLINE, EVENT, LIST, MARK, UNMARK, DELETE, BYE, ON, FIND, UPDATE, UNKNOWN;
 
     /**
      * Maps a raw command word to its Command, case-insensitively.
@@ -22,6 +22,7 @@ public enum Command {
             case "bye" -> BYE;
             case "on" -> ON;
             case "find" -> FIND;
+            case "update" -> UPDATE;
             default -> UNKNOWN;
         };
     }
