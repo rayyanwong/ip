@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TaskListTest {
     @Test
@@ -50,4 +51,28 @@ public class TaskListTest {
         assertEquals(1,
                 taskList.on(LocalDate.of(2026, 6, 6)).size());
     }
+
+    @Test
+    public void update_desc_changesDescription() throws OdysseusException {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("old"));
+        Task updated = taskList.update(0, "/desc", "new");
+        assertEquals("[T][ ] new", updated.toString());
+    }
+
+    @Test
+    public void update_deadlineBy_changesDate() throws OdysseusException {
+        TaskList taskList = new TaskList();
+        taskList.add(new Deadline("submit", "2026-06-06"));
+        Task updated = taskList.update(0, "/by", "2026-12-25");
+        assertEquals("D | 0 | submit | 2026-12-25", updated.toSaveFormat());
+    }
+
+    @Test
+    public void update_flagNotApplicableToType_throws() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("x"));
+        assertThrows(OdysseusException.class, () -> taskList.update(0, "/by", "2026-01-01"));
+    }
+
 }

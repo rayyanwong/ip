@@ -1,5 +1,7 @@
 package odysseus.task;
 
+import odysseus.OdysseusException;
+
 import java.time.LocalDate;
 
 /**
@@ -65,6 +67,23 @@ public abstract class Task {
      */
     public boolean descriptionContains(String keyword) {
         return this.description.toLowerCase().contains(keyword.toLowerCase());
+    }
+
+    /**
+     * Updates one field of this task, identified by a flag. The base
+     * implementation handles the shared {@code /desc} field; subclasses
+     * override to handle their own fields.
+     *
+     * @param flag  the field to update (e.g. {@code /desc})
+     * @param value the new value for that field
+     * @throws OdysseusException if the flag is not applicable to this task type
+     */
+    public void update(String flag, String value) throws OdysseusException {
+        if (flag.equals("/desc")) {
+            this.description = value;
+            return;
+        }
+        throw new OdysseusException("Hey! This task has no " + flag + " to update! ");
     }
 
     @Override
