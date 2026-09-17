@@ -48,7 +48,7 @@ public class ParserTest {
         String input = "return book /by 2026-32-56";
         OdysseusException e = assertThrows(OdysseusException.class, () ->
                 Parser.parseDeadline(input));
-        assertTrue(e.getMessage().contains("format"));
+        assertTrue(e.getMessage().contains("YYYY-MM-DD"));
     }
 
     // Event tests
@@ -84,7 +84,7 @@ public class ParserTest {
     public void parseIndex_notNumber_throwsOdysseusException() {
         OdysseusException e = assertThrows(OdysseusException.class, () ->
                 Parser.parseIndex(new String[]{"mark", "abc"}, 5));
-        assertTrue(e.getMessage().contains("be a number"));
+        assertTrue(e.getMessage().contains("number"));
     }
 
     @Test
@@ -98,6 +98,6 @@ public class ParserTest {
     public void parseIndex_noNumber_throwsOdysseusException() {
         OdysseusException e = assertThrows(OdysseusException.class, () ->
             Parser.parseIndex(new String[]{"mark"}, 5));
-        assertTrue(e.getMessage().contains("Provide"));
+        assertTrue(e.getMessage().contains("number"));
     }
 }

@@ -20,12 +20,12 @@ public class Odysseus {
     private final TaskList tasks;
     private boolean isExit = false;
 
-    private static final String MARK_MSG = "Nice! I've marked this task as done:%n  %s";
-    private static final String UNMARK_MSG = "OK, I've marked this task as not done yet:%n  %s";
-    private static final String BYE_MSG = "Bye. Hope to see you again soon!";
+    private static final String MARK_MSG = "Done. One less thing between us and home:%n  %s";
+    private static final String UNMARK_MSG = "Undone. It waits for us again:%n  %s";
+    private static final String BYE_MSG = "Enough for today. The tide will turn.";
     public static final String DEFAULT_STORAGE = "data/odysseus.txt";
-    private static final String ADD_MSG = "Got it. I've added this task:%n  %s%nNow you have %d tasks in the list.";
-    private static final String UPDATE_MSG = "Updated task %d:%n  %s";
+    private static final String ADD_MSG = "Marked. The road grows longer:%n  %s%n%d trials stand between us and Ithaca.";
+    private static final String UPDATE_MSG = "The course corrects. Task %d:%n  %s";
 
     /**
      * Constructs Odysseus cli backed by a given filePath.
@@ -68,7 +68,7 @@ public class Odysseus {
     public String getResponse(String input) {
         try {
             if (input.isBlank()) {
-                throw new OdysseusException("Hey! Please enter a command...");
+                throw new OdysseusException("Say something. Silence won't get us home.");
             }
             // Normalise surrounding and repeated whitespace so sloppy spacing
             // (e.g. leading spaces or "mark  2") is tolerated. Splitting on \s+
@@ -91,7 +91,7 @@ public class Odysseus {
                 case Command.FIND -> handleFind(rest);
                 case Command.UPDATE -> handleUpdate(inputSplit, rest);
                 case Command.UNKNOWN -> {
-                    throw new OdysseusException("Hey! That's not a valid command. Try again.");
+                    throw new OdysseusException("I don't know that command. Try again.");
                 }
             };
         } catch (OdysseusException e) {
@@ -152,7 +152,7 @@ public class Odysseus {
         Task removedTask = tasks.remove(idx);
         storage.save(tasks.getTasks());
         return String.format(
-                "Noted. I've removed this task:%n  %s%nNow you have %d tasks in the list.",
+                "Gone. We don't look back:%n  %s%n%d remain.",
                 removedTask, tasks.size());
     }
 
@@ -166,14 +166,13 @@ public class Odysseus {
      */
     private String handleOn(String rest) throws OdysseusException {
         if (rest.isEmpty()) {
-            throw new OdysseusException("Hey! The date can't be empty...");
+            throw new OdysseusException("Which day? Give me a date.");
         }
         try {
             LocalDate onDate = LocalDate.parse(rest);
             return formatTasks(tasks.on(onDate));
         } catch (DateTimeParseException e) {
-            throw new OdysseusException("Hey! The date can't be parsed..." +
-                    "Provide in the form of yyyy-mm-dd");
+            throw new OdysseusException("That date won't hold. Use YYYY-MM-DD.");
         }
     }
 
@@ -187,7 +186,7 @@ public class Odysseus {
      */
     private String handleFind(String rest) throws OdysseusException {
         if (rest.isEmpty()) {
-            throw new OdysseusException("Hey! The keyword to find can't be empty...");
+            throw new OdysseusException("What word am I looking for?");
         }
         return formatTasks(tasks.find(rest));
     }
@@ -202,7 +201,7 @@ public class Odysseus {
      */
     private String handleAdd(Task toAdd) throws OdysseusException {
         if (tasks.hasDuplicate(toAdd)) {
-            throw new OdysseusException("Hey! That task is already in your list...");
+            throw new OdysseusException("Already on the list. We don't repeat mistakes.");
         }
         tasks.add(toAdd);
         storage.save(tasks.getTasks());
@@ -222,7 +221,7 @@ public class Odysseus {
         int idx = Parser.parseIndex(inputSplit, tasks.size());   // reuse: validates + throws on bad index
         String[] parts = rest.split(" ", 3);       // [index, flag, value]
         if (parts.length < 3 || parts[2].isBlank()) {
-            throw new OdysseusException("Hey! Usage: update INDEX /desc|/by|/from|/to NEW_VALUE...");
+            throw new OdysseusException("Say it plainly: update INDEX /desc|/by|/from|/to NEW_VALUE");
         }
         String flag = parts[1];
         String value = parts[2];
@@ -249,7 +248,7 @@ public class Odysseus {
      */
     private String formatTasks(List<Task> list) {
         if (list.isEmpty()) {
-            return "No tasks available";
+            return "Nothing remains. For now.";
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {

@@ -98,7 +98,7 @@ public abstract class Task {
             this.description = value;
             return;
         }
-        throw new OdysseusException("Hey! This task has no " + flag + " to update! ");
+        throw new OdysseusException("This task has no " + flag + " to change.");
     }
 
     @Override

@@ -21,16 +21,16 @@ public class Parser {
      */
     public static int parseIndex(String[] parts, int count) throws OdysseusException {
         if (parts.length < 2) {
-            throw new OdysseusException("Provide a task number...");
+            throw new OdysseusException("Which one? Give me a number.");
         }
         int n;
         try {
             n = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-            throw new OdysseusException("Hey! The task number must be a number...");
+            throw new OdysseusException("That's not a number.");
         }
         if (n < 1 || n > count) {
-            throw new OdysseusException("There's no task numbered " + n + "...");
+            throw new OdysseusException("There's no task " + n + ".");
         }
         return n - 1;
     }
@@ -44,7 +44,7 @@ public class Parser {
      */
     public static Todo parseTodo(String rest) throws OdysseusException {
         if (rest.isEmpty()) {
-            throw new OdysseusException("Hey! The description can't be empty...");
+            throw new OdysseusException("It needs a name.");
         }
         return new Todo(rest);
     }
@@ -59,13 +59,13 @@ public class Parser {
     public static Deadline parseDeadline(String rest) throws OdysseusException {
         String[] parts = rest.split(" /by ");
         if (parts.length < 2) {
-            throw new OdysseusException("Hey! A deadline needs a /by time...");
+            throw new OdysseusException("A deadline needs a /by time.");
         }
         if (parts[0].isEmpty()) {
-            throw new OdysseusException("Hey! The description can't be empty...");
+            throw new OdysseusException("It needs a name.");
         }
         if (parts[1].isEmpty()) {
-            throw new OdysseusException("Hey! The deadline can't be empty...");
+            throw new OdysseusException("The time can't be empty.");
         }
         return new Deadline(parts[0], parts[1]);
     }
@@ -80,22 +80,22 @@ public class Parser {
     public static Event parseEvent(String rest) throws OdysseusException {
         String[] fromParts = rest.split(" /from ");
         if (fromParts.length < 2) {
-            throw new OdysseusException("Hey! An event needs a /from start time...");
+            throw new OdysseusException("An event needs a /from. When does it start?");
         }
         String[] toParts = fromParts[1].split(" /to ");
         if (fromParts[0].isEmpty()) {
-            throw new OdysseusException("Hey! The description can't be empty...");
+            throw new OdysseusException("It needs a name.");
         }
 
         if (toParts.length < 2) {
-            throw new OdysseusException("Hey! An event needs a /to end time...");
+            throw new OdysseusException("An event needs a /to. When does it end?");
         }
 
         if (toParts[0].isEmpty()) {
-            throw new OdysseusException("Hey! The start time can't be empty...");
+            throw new OdysseusException("The start can't be empty.");
         }
         if (toParts[1].isEmpty()) {
-            throw new OdysseusException("Hey! The end time can't be empty...");
+            throw new OdysseusException("The end can't be empty.");
         }
         return new Event(fromParts[0], toParts[0], toParts[1]);
     }
