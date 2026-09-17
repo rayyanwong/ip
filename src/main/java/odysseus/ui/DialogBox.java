@@ -88,4 +88,19 @@ public class DialogBox extends HBox {
         db.dialog.getStyleClass().add("odysseus-bubble");
         return db;
     }
+
+    /**
+     * Returns a dialog box showing an error reply from Odysseus, styled
+     * distinctly so failures stand out from normal replies.
+     *
+     * @param text the error message
+     * @param img Odysseus's avatar
+     * @return a dialog box representing an error reply
+     */
+    public static DialogBox getOdysseusErrorDialog(String text, Image img) {
+        DialogBox db = new DialogBox(text, img);
+        db.flip();
+        db.dialog.getStyleClass().add("error-bubble");
+        return db;
+    }
 }
