@@ -19,6 +19,7 @@ public class Odysseus {
     private final Storage storage;
     private final TaskList tasks;
     private boolean isExit = false;
+    private boolean lastResponseWasError = false;
 
     private static final String MARK_MSG = "Done. One less thing between us and home:%n  %s";
     private static final String UNMARK_MSG = "Undone. It waits for us again:%n  %s";
@@ -66,6 +67,7 @@ public class Odysseus {
      * @return the response text to show
      */
     public String getResponse(String input) {
+        lastResponseWasError = false;
         try {
             if (input.isBlank()) {
                 throw new OdysseusException("Say something. Silence won't get us home.");
@@ -95,8 +97,20 @@ public class Odysseus {
                 }
             };
         } catch (OdysseusException e) {
+            lastResponseWasError = true;
             return e.getMessage();
         }
+    }
+
+    /**
+     * Returns whether the most recent {@link #getResponse(String)} call produced
+     * an error message rather than a normal reply. The GUI uses this to style
+     * error responses distinctly.
+     *
+     * @return true if the last response was an error
+     */
+    public boolean wasLastResponseError() {
+        return lastResponseWasError;
     }
 
     /**

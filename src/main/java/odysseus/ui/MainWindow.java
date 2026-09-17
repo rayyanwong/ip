@@ -70,9 +70,12 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String input = userInput.getText();
         String response = odysseus.getResponse(input);
+        DialogBox odysseusDialog = odysseus.wasLastResponseError()
+                ? DialogBox.getOdysseusErrorDialog(response, odysseusImage)
+                : DialogBox.getOdysseusDialog(response, odysseusImage);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getOdysseusDialog(response, odysseusImage)
+                odysseusDialog
         );
         userInput.clear();
 
