@@ -22,7 +22,9 @@ public abstract class Task {
     }
 
     /**
-     * Returns status of task depending on isDone.
+     * Returns the status icon of the task depending on whether it is done.
+     *
+     * @return {@code "X"} if the task is done, otherwise a single space
      */
     public String getStatusIcon() {
         return (isDone ? "X" : " "); // mark done task with X

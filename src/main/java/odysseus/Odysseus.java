@@ -95,11 +95,24 @@ public class Odysseus {
         }
     }
 
+    /**
+     * Handles the {@code bye} command: flags the session to end.
+     *
+     * @return the farewell message to display
+     */
     private String handleBye() {
         this.isExit = true;
         return BYE_MSG;
     }
 
+    /**
+     * Handles the {@code mark} command: marks the task at the given index as
+     * done and persists the change.
+     *
+     * @param inputSplit the whitespace-split command line
+     * @return the confirmation message to display
+     * @throws OdysseusException if the index is missing or out of range
+     */
     private String handleMark(String[] inputSplit) throws OdysseusException {
         int idx = Parser.parseIndex(inputSplit, tasks.size());
         Task markedTask = tasks.mark(idx);
@@ -107,6 +120,14 @@ public class Odysseus {
         return String.format(MARK_MSG, markedTask);
     }
 
+    /**
+     * Handles the {@code unmark} command: marks the task at the given index as
+     * not done and persists the change.
+     *
+     * @param inputSplit the whitespace-split command line
+     * @return the confirmation message to display
+     * @throws OdysseusException if the index is missing or out of range
+     */
     private String handleUnmark(String[] inputSplit) throws OdysseusException {
         int idx = Parser.parseIndex(inputSplit, tasks.size());
         Task unmarkedTask = tasks.unmark(idx);
@@ -114,6 +135,14 @@ public class Odysseus {
         return String.format(UNMARK_MSG, unmarkedTask);
     }
 
+    /**
+     * Handles the {@code delete} command: removes the task at the given index
+     * and persists the change.
+     *
+     * @param inputSplit the whitespace-split command line
+     * @return the confirmation message to display
+     * @throws OdysseusException if the index is missing or out of range
+     */
     private String handleDelete(String[] inputSplit) throws OdysseusException {
         int idx = Parser.parseIndex(inputSplit, tasks.size());
         Task removedTask = tasks.remove(idx);
@@ -123,6 +152,14 @@ public class Odysseus {
                 removedTask, tasks.size());
     }
 
+    /**
+     * Handles the {@code on} command: lists the tasks occurring on the given
+     * date.
+     *
+     * @param rest the command arguments after the keyword (the date, {@code yyyy-mm-dd})
+     * @return the formatted list of tasks on that date
+     * @throws OdysseusException if the date is empty or cannot be parsed
+     */
     private String handleOn(String rest) throws OdysseusException {
         if (rest.isEmpty()) {
             throw new OdysseusException("Hey! The date can't be empty...");
@@ -136,6 +173,14 @@ public class Odysseus {
         }
     }
 
+    /**
+     * Handles the {@code find} command: lists the tasks whose descriptions
+     * contain the given keyword.
+     *
+     * @param rest the command arguments after the keyword (the search term)
+     * @return the formatted list of matching tasks
+     * @throws OdysseusException if the keyword is empty
+     */
     private String handleFind(String rest) throws OdysseusException {
         if (rest.isEmpty()) {
             throw new OdysseusException("Hey! The keyword to find can't be empty...");
@@ -143,12 +188,29 @@ public class Odysseus {
         return formatTasks(tasks.find(rest));
     }
 
+    /**
+     * Handles the {@code todo}, {@code deadline}, and {@code event} commands:
+     * adds the parsed task to the list and persists the change.
+     *
+     * @param toAdd the task produced by the parser
+     * @return the confirmation message to display
+     * @throws OdysseusException if the task cannot be saved
+     */
     private String handleAdd(Task toAdd) throws OdysseusException {
         tasks.add(toAdd);
         storage.save(tasks.getTasks());
         return String.format(ADD_MSG, toAdd, tasks.size());
     }
 
+    /**
+     * Handles the {@code update} command: edits one field of an existing task
+     * in place and persists the change.
+     *
+     * @param inputSplit the whitespace-split command line (used to read the index)
+     * @param rest the command arguments after the keyword ({@code INDEX /FLAG NEW_VALUE})
+     * @return the confirmation message to display
+     * @throws OdysseusException if the index is invalid or the flag/value is missing or unsupported
+     */
     private String handleUpdate(String[] inputSplit, String rest) throws OdysseusException {
         int idx = Parser.parseIndex(inputSplit, tasks.size());   // reuse: validates + throws on bad index
         String[] parts = rest.split(" ", 3);       // [index, flag, value]
@@ -171,6 +233,13 @@ public class Odysseus {
         return isExit;
     }
 
+    /**
+     * Formats a list of tasks into a numbered, newline-separated string for
+     * display.
+     *
+     * @param list the tasks to format
+     * @return the numbered list, or a placeholder message if the list is empty
+     */
     private String formatTasks(List<Task> list) {
         if (list.isEmpty()) {
             return "No tasks available";

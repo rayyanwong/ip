@@ -47,7 +47,7 @@ public class MainWindow extends AnchorPane {
     /**
      * Injects the Odysseus instance that command handling is delegated to.
      *
-     * @param o the chatbot logic instance
+     * @param odysseus the chatbot logic instance
      */
     public void setOdysseus(Odysseus odysseus) {
         this.odysseus = odysseus;
