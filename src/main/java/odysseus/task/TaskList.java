@@ -123,6 +123,19 @@ public class TaskList {
     }
 
     /**
+     * Returns whether the list already contains a task equivalent to the given
+     * one, as judged by {@link Task#isSameTask(Task)}.
+     *
+     * @param task the candidate task to check for
+     * @return true if an equivalent task is already present
+     */
+    public boolean hasDuplicate(Task task) {
+        assert task != null : "hasDuplicate called with a null task";
+        return tasks.stream()
+                .anyMatch(task::isSameTask);
+    }
+
+    /**
      * Updates a field of the task at the given index.
      *
      * @param idx   index of the task using 0-based indexing
