@@ -45,8 +45,8 @@ public class Ui {
                   \\___/ \\__,_|\\__, |___/___/\\___|\\__,_|___/
                               |___/                       \s
                 ____________________________________________________________
-                Hello! I'm %s
-                What can I do for you?
+                I am %s. The war is over. The long way home begins.
+                What must be done?
                 ____________________________________________________________
                 """, this.name);
         System.out.println(str);

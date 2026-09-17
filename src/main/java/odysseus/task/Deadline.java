@@ -61,7 +61,7 @@ public class Deadline extends Task {
             try {
                 this.by = LocalDate.parse(value);
             } catch (DateTimeParseException e) {
-                throw new OdysseusException("Invalid by input, please give in the format of YYYY-MM-DD...");
+                throw new OdysseusException("That date won't hold. Use YYYY-MM-DD.");
             }
         } else {
             super.update(flag, value);

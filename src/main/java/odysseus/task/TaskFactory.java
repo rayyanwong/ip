@@ -21,7 +21,7 @@ public class TaskFactory {
         String[] parts = line.split(" \\| ");
 
         if (parts.length < 3) {
-            throw new OdysseusException("Corrupted save format...Please verify line: " + line);
+            throw new OdysseusException("The record is damaged. Check this line: " + line);
         }
         String marker = parts[0].strip();
         boolean isDone = parts[1].strip().equals("1");
@@ -33,20 +33,18 @@ public class TaskFactory {
                 break;
             case "D":
                 if (parts.length < 4) {
-                    throw new OdysseusException("Corrupted save format for odysseus.task.Deadline..." +
-                            "Please verify line: " + line);
+                    throw new OdysseusException("The record is damaged. Check this line: " + line);
                 }
                 task = new Deadline(parts[2], parts[3]);
                 break;
             case "E":
                 if (parts.length < 5) {
-                    throw new OdysseusException("Corrupted save format for odysseus.task.Event..." +
-                            "Please verify line: " + line);
+                    throw new OdysseusException("The record is damaged. Check this line: " + line);
                 }
                 task = new Event(parts[2], parts[3], parts[4]);
                 break;
             default:
-                throw new OdysseusException("Line corrupted, invalid marker");
+                throw new OdysseusException("The record is damaged. I don't know this mark.");
         }
 
         if (isDone) {
