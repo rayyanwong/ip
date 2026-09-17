@@ -70,9 +70,13 @@ public class Odysseus {
             if (input.isBlank()) {
                 throw new OdysseusException("Hey! Please enter a command...");
             }
-            String[] inputSplit = input.split(" ");
+            // Normalise surrounding and repeated whitespace so sloppy spacing
+            // (e.g. leading spaces or "mark  2") is tolerated. Splitting on \s+
+            // collapses any run of whitespace into a single delimiter.
+            String trimmedInput = input.strip();
+            String[] inputSplit = trimmedInput.split("\\s+");
             String command = inputSplit[0];
-            String rest = input.substring(command.length()).trim();
+            String rest = trimmedInput.substring(command.length()).trim();
 
             return switch (Command.fromInput(command)) {
                 case Command.BYE -> handleBye();
@@ -197,6 +201,9 @@ public class Odysseus {
      * @throws OdysseusException if the task cannot be saved
      */
     private String handleAdd(Task toAdd) throws OdysseusException {
+        if (tasks.hasDuplicate(toAdd)) {
+            throw new OdysseusException("Hey! That task is already in your list...");
+        }
         tasks.add(toAdd);
         storage.save(tasks.getTasks());
         return String.format(ADD_MSG, toAdd, tasks.size());

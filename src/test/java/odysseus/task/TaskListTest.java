@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TaskListTest {
     @Test
@@ -73,6 +75,49 @@ public class TaskListTest {
         TaskList taskList = new TaskList();
         taskList.add(new Todo("x"));
         assertThrows(OdysseusException.class, () -> taskList.update(0, "/by", "2026-01-01"));
+    }
+
+    @Test
+    public void hasDuplicate_identicalTodo_returnsTrue() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("read book"));
+        assertTrue(taskList.hasDuplicate(new Todo("read book")));
+    }
+
+    @Test
+    public void hasDuplicate_differentDescription_returnsFalse() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("read book"));
+        assertFalse(taskList.hasDuplicate(new Todo("write book")));
+    }
+
+    @Test
+    public void hasDuplicate_sameDescriptionDifferentType_returnsFalse() throws OdysseusException {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("x"));
+        assertFalse(taskList.hasDuplicate(new Deadline("x", "2026-06-06")));
+    }
+
+    @Test
+    public void hasDuplicate_ignoresDoneStatus_returnsTrue() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Todo("x"));
+        taskList.mark(0);
+        assertTrue(taskList.hasDuplicate(new Todo("x")));
+    }
+
+    @Test
+    public void hasDuplicate_deadlineSameDescriptionDifferentDate_returnsFalse() throws OdysseusException {
+        TaskList taskList = new TaskList();
+        taskList.add(new Deadline("submit", "2026-06-06"));
+        assertFalse(taskList.hasDuplicate(new Deadline("submit", "2026-06-07")));
+    }
+
+    @Test
+    public void hasDuplicate_eventDifferentEndTime_returnsFalse() {
+        TaskList taskList = new TaskList();
+        taskList.add(new Event("camp", "Mon", "Wed"));
+        assertFalse(taskList.hasDuplicate(new Event("camp", "Mon", "Thu")));
     }
 
 }

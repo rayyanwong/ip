@@ -72,6 +72,19 @@ public abstract class Task {
     }
 
     /**
+     * Returns whether this task is a duplicate of another: it must be the same
+     * concrete type and share the same defining fields. Done status is ignored.
+     *
+     * @param other the task to compare against
+     * @return true if the two tasks represent the same task
+     */
+    public boolean isSameTask(Task other) {
+        return other != null
+                && this.getClass() == other.getClass()
+                && this.description.equals(other.description);
+    }
+
+    /**
      * Updates one field of this task, identified by a flag. The base
      * implementation handles the shared {@code /desc} field; subclasses
      * override to handle their own fields.

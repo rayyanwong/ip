@@ -47,6 +47,15 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean isSameTask(Task other) {
+        if (!super.isSameTask(other)) {
+            return false;
+        }
+        Deadline otherDeadline = (Deadline) other;
+        return this.by.equals(otherDeadline.by);
+    }
+
+    @Override
     public void update(String flag, String value) throws OdysseusException {
         if (flag.equals("/by")) {
             try {

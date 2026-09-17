@@ -91,7 +91,10 @@ public class Parser {
             throw new OdysseusException("Hey! An event needs a /to end time...");
         }
 
-        if (toParts[0].isEmpty() || toParts[1].isEmpty()) {
+        if (toParts[0].isEmpty()) {
+            throw new OdysseusException("Hey! The start time can't be empty...");
+        }
+        if (toParts[1].isEmpty()) {
             throw new OdysseusException("Hey! The end time can't be empty...");
         }
         return new Event(fromParts[0], toParts[0], toParts[1]);

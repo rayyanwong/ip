@@ -21,6 +21,16 @@ public class Event extends Task {
     }
 
     @Override
+    public boolean isSameTask(Task other) {
+        if (!super.isSameTask(other)) {
+            return false;
+        }
+        Event otherEvent = (Event) other;
+        return this.from.equals(otherEvent.from)
+                && this.to.equals(otherEvent.to);
+    }
+
+    @Override
     public void update(String flag, String value) throws OdysseusException {
         if (flag.equals("/from")) {
             this.from = value;
