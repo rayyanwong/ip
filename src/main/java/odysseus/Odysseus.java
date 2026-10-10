@@ -59,6 +59,17 @@ public class Odysseus {
     }
 
     /**
+     * Returns the greeting shown when a session starts. Delegates to the
+     * {@link Ui} so the message text has a single source of truth shared by
+     * the CLI and the GUI.
+     *
+     * @return the greeting text
+     */
+    public String getWelcome() {
+        return ui.getWelcome();
+    }
+
+    /**
      * Processes a single user command and returns Odysseus's textual response.
      * This is the seam the GUI calls: it hands over a raw input line and
      * receives back the text to display, instead of anything being printed.

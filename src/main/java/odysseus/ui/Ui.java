@@ -34,22 +34,30 @@ public class Ui {
     }
 
     /**
-     * Prints welcome banner and introduction.
+     * Returns Odysseus's greeting: a short in-character introduction shown when
+     * a session starts. Contains no ASCII banner or horizontal rules, so it
+     * renders cleanly in the GUI's proportional font as well as on the CLI.
+     *
+     * @return the greeting text
+     */
+    public String getWelcome() {
+        return "I am " + this.name + ". The war is over. The long way home begins.\n"
+                + "What must be done?";
+    }
+
+    /**
+     * Prints the welcome banner and greeting to the CLI.
      */
     public void showWelcome() {
-        String str = String.format("""
+        String banner = """
                    ___      _                             \s
                   / _ \\  __| |_   _ ___ ___  ___ _   _ ___\s
                  | | | |/ _` | | | / __/ __|/ _ \\ | | / __|
                  | |_| | (_| | |_| \\__ \\__ \\  __/ |_| \\__ \\
                   \\___/ \\__,_|\\__, |___/___/\\___|\\__,_|___/
                               |___/                       \s
-                ____________________________________________________________
-                I am %s. The war is over. The long way home begins.
-                What must be done?
-                ____________________________________________________________
-                """, this.name);
-        System.out.println(str);
+                """;
+        System.out.println(banner + String.format(MSG_FORMAT, getWelcome()));
     }
 
     /**

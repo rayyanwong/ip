@@ -45,12 +45,19 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the Odysseus instance that command handling is delegated to.
+     * Injects the Odysseus instance that command handling is delegated to, then
+     * shows Odysseus's greeting as the first dialog box.
+     *
+     * <p>The greeting is shown here rather than in {@link #initialize()} because
+     * JavaFX calls {@code initialize()} during FXML loading, before this setter
+     * runs; at that point {@code odysseus} is still {@code null}.
      *
      * @param odysseus the chatbot logic instance
      */
     public void setOdysseus(Odysseus odysseus) {
         this.odysseus = odysseus;
+        dialogContainer.getChildren().add(
+                DialogBox.getOdysseusDialog(odysseus.getWelcome(), odysseusImage));
     }
 
     private void handleExit() {
